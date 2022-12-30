@@ -1,0 +1,12 @@
+#sticky-wrapper,
+footer
+{
+	background-color: #8f0000;
+	color: white;
+}
+
+header
+{
+	text-align: center;
+	width: 100%;
+}
