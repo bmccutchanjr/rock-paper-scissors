@@ -1,0 +1,25 @@
+.title-fade
+{
+	animation-duration: 0.4s;
+/* animation-duration: 1s; */
+	animation-name: title-fade;
+	animation-timing-function: linear;
+	animation-fill-mode: forwards;
+	text-align: center;
+	width: 100%;
+}
+
+@keyframes title-fade
+{
+	from
+	{
+		opacity: 1;
+		font-size: 100px;
+	}
+
+	to
+	{
+		opacity: 0;
+		font-size: 30px;
+	}
+}

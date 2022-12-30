@@ -25,7 +25,6 @@ body
 
 header
 {
-	/* background: rgba(255, 0, 0, 0.5); */
 	font-family: "Fredoka One", cursive;
 	font-size: 36px;
 	margin: 0px;
@@ -51,7 +50,6 @@ html
 
 #sticky-wrapper
 {
-	background: rgba(0, 255, 255, 0.5);
 	height: 100%;
 		min-height: 100%;
 	margin-bottom: -32px;
@@ -65,6 +63,7 @@ html
 footer
 {
 	background: black;
+	color: white;
 	display: flex;
 		flex-direction: row;
 		justify-content: space-between;
