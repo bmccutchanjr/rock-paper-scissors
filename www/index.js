@@ -1,7 +1,7 @@
 window.addEventListener ("load", event =>
 	{	event.preventDefault();
 
-		titleFade ();
+		titleFade();
 	})
 
 let count = 0
