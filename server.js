@@ -9,7 +9,7 @@ const chalk = require("chalk");
 const cookies = require ("cookie-parser");
 const dotenv = require("dotenv").config();
 const express = require("express");
-//	01	const session = require ("express-sessions");
+const session = require ("express-session");
 const passport = require("passport");
 const websocket = require("./end-points/sockets.js");
 
@@ -19,12 +19,12 @@ const app = express();
 app.use(cookies());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-//	01	app.use (session (
-//	01		{
-//	01			secret: "keyboard cat",
-//	01			resave: true,
-//	01			saveUninitialized: true
-//	01		}));
+app.use (session (
+	{
+		secret: "keyboard cat",
+		resave: true,
+		saveUninitialized: true
+	}));
 
 //  And link Passport to ExpressJS
 
