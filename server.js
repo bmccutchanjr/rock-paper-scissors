@@ -1,39 +1,47 @@
-//  This module is the entry point to the application and is used to configure the web server with ExpressJS,
-//  Passport and the WebSockets module ws.  Several other dependencies have been required that serve as an aid
-//  in development and/or modularization and encapsulation.
+//	Rock Paper Scissors is an two person interactive real-time web version of the classic game.  Only two people can
+//	play in one game, the application does support multiple games.
 //
+//  This module is the entry point.  It configures a web server with ExpressJS and WS to support WebSockets.
+
+//	01  This application requires no confdential or personally identifiable information and there's no need for players
+//		to register or authenticate.  So there's no need for Passport, except to show that I can do it.  In the interest
+//		of an improved user experience, I'm removing Passport.
+//
+//		Without Passport and user authentication, I don't need cookies, a database or session management.
+
+//	02	I'm thinking I don't need to support API's either.  Just static routes and WebSockets
+
 //  Require and configure NPM modules that are required to configure ExpressJS with WS
-//
 
 const chalk = require("chalk");
-const cookies = require ("cookie-parser");
-const dotenv = require("dotenv").config();
+//	01	const cookies = require ("cookie-parser");
+//	01	const dotenv = require("dotenv").config();
 const express = require("express");
-const session = require ("express-session");
-const passport = require("passport");
+//	01	const session = require ("express-session");
+//	01	const passport = require("passport");
 const websocket = require("./end-points/sockets.js");
 
 // Configure ExpressJS
 
 const app = express();
-app.use(cookies());
+//	01	app.use(cookies());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use (session (
-	{
-		secret: "keyboard cat",
-		resave: true,
-		saveUninitialized: true
-	}));
-
-//  And link Passport to ExpressJS
-
+//	01	app.use (session (
+//	01		{
+//	01			secret: "keyboard cat",
+//	01			resave: true,
+//	01			saveUninitialized: true
+//	01		}));
+//	01	
+//	01	//  And link Passport to ExpressJS
+//	01	
 //	01	app.use (passport.initialize());
 //	01	app.use (passport.session ());
 
 //  Require custom modules to handles routes and end-points
 
-//	03	app.use ("/api", require("./end-points/api.js"));
+//	02	app.use ("/api", require("./end-points/api.js"));
 app.use ("/", require("./end-points/routes.js"));
 
 // Set the PORT to be used by the server.  If the Node.js process environment has a variable defined called
