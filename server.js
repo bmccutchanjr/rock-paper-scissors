@@ -11,7 +11,7 @@ const dotenv = require("dotenv").config();
 const express = require("express");
 //	01	const session = require ("express-sessions");
 const passport = require("passport");
-//	02	const websocket = require("./end-points/sockets.js");
+const websocket = require("./end-points/sockets.js");
 
 // Configure ExpressJS
 
@@ -58,4 +58,4 @@ const server = app.listen (PORT, () =>
 
 //  ExpressJS returns a reference to the HTTP server it created.  Use that to start a WebSocket server.
 
-//	02	websocket.createServer (server);
+websocket.createServer (server);
