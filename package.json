@@ -1,0 +1,29 @@
+{
+  "name": "rock-paper-scissors",
+  "version": "1.0.0",
+  "description": "Multi-player interactive web version of the classic game",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bmccutchanjr/rock-paper-scissors.git"
+  },
+  "author": "Bill McCutchan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bmccutchanjr/rock-paper-scissors/issues"
+  },
+  "homepage": "https://github.com/bmccutchanjr/rock-paper-scissors#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "chalk": "^4.1.2",
+    "express": "^4.18.2",
+    "express-sessions": "^1.0.1",
+    "passport": "^0.6.0",
+    "snmp": "^0.0.3",
+    "ws": "^8.11.0"
+  }
+}
