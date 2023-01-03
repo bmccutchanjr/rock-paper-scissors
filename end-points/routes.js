@@ -43,6 +43,11 @@ router
 		//  code, so send them a 404 page!
 
 		response.sendFile(path.join(__dirname, "../www/404.html"));
+
+		console.log (chalk.red ("HTTP SERVER ALERT"));
+		console.log (chalk.red ("Someone requested a resource that is not found on this server"));
+		console.log (chalk.red (request.url));
+		console.log (chalk.red (request.ip));
 	});
 
 module.exports = router;

@@ -156,7 +156,7 @@ const WSS =
 	shutdown: server =>
 	{	//	This function allows the HTTP server to forward a shutdown event notification...
 
-		console.log (chalk.redBright("WebSocket server received termination order"))
+		console.log (chalk.redBright("Shutting down the WebSocket server..."))
 		server.close();
 		server.clients.forEach (c => { c.close() } );
 		clearInterval (interval);
