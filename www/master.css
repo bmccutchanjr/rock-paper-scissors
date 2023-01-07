@@ -3,6 +3,7 @@
 *
 {
 	box-sizing: border-box;
+	color: inherit;
 	font-family: inherit;
 	margin: 0px;
 	padding: 0px;
@@ -10,11 +11,15 @@
 
 :root
 {
+	--background-color: #cfcfff;
+	--color: black;
 	--page-width: 80%;
 }
 
 body
 {
+	background-color: var(--background-color);
+	color: var(--color);
 	font-family: sans-serif;
 	font-size: 14px;
 	height: 100%;
@@ -28,8 +33,10 @@ header
 	font-family: "Fredoka One", cursive;
 	font-size: 36px;
 	margin: 0px;
-	padding-top: 35vh;
+	padding-bottom: 30px;
+	padding-top: 30px;
 	text-align: center;
+	width: 100%;
 }
 
 main

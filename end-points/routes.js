@@ -36,12 +36,33 @@ router
 		response.sendFile(path.join(__dirname, "../www/index.html"));
 	})
 
+.get("/about", (request, response) =>
+	{   //  server the 'about' page
+
+		response.sendFile(path.join(__dirname, "../www/about/about.html"));
+	})
+
+//	03B	.get("/404/", (request, response) =>
+//	03B		{   //  A generic route handler
+//	03B	
+//	03B	//	03A		response.sendFile(path.join(__dirname, "../www/404/" + request.url));
+//	03B			response.sendFile(path.join(__dirname, "../www/404/404.html"));
+//	03B		})
+
 .use(express.static(path.join(__dirname, "../www")))
 
 .use((request, response) =>
 	{   //  Finally, a handler to for unknown route requests.  That corresponds to an HTML 404 status
 		//  code, so send them a 404 page!
 
+//	03	Rather than serve the 404 page directly, redirect the browser to the 404 page.  Serving the page requires
+//	03	that I either save the 404 page from the root folder or specify the path to it's support files (like .css
+//	03	and .js) in the HTML.  Neither is a really pretty solution but the later is uglier.  Redirecting the
+//	03	browser will get it to request support files from the proper folder without a lot of extra routes...
+//	03			response.sendFile(path.join(__dirname, "../www/404.html"));
+//	03B	But it seems that dosn't work the way I expected it to...the browser requested the [age correctly, but it's
+//	03B	requesting the .css from the root folder...so it's back to serving the file for now...
+//	03B		response.redirect ("/404/404.html");
 		response.sendFile(path.join(__dirname, "../www/404.html"));
 
 		console.log (chalk.red ("HTTP SERVER ALERT"));
