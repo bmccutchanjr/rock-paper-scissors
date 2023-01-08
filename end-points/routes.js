@@ -28,16 +28,16 @@ router
 	})
 
 .get("/", (request, response) =>
-	{   //  A generic route handler
+	{   //  Serve the home page
 
 //	02			if (!request.user)
 //	02				return response.status(401).sendFile(path.join(__dirname, "../web/login.html"));
 //	02	
-		response.sendFile(path.join(__dirname, "../www/index.html"));
+		response.sendFile(path.join(__dirname, "../www/home.html"));
 	})
 
 .get("/about", (request, response) =>
-	{   //  server the 'about' page
+	{   //  serve the 'about' page
 
 		response.sendFile(path.join(__dirname, "../www/about/about.html"));
 	})
