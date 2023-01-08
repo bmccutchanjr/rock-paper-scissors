@@ -15,6 +15,19 @@
 	<div id="sticky-wrapper">
 		<main>
 			<header></header>
+			<section id="name-section" class="hidden">
+				<input id="name-input" placeholder="What name would you like to use while you play today?" type="text">
+				<button id="get-a-name">Let us pick a name for you</button>
+				<button id="next-button" class="hidden">next</button>
+			</section>
+			<section id="player-section" class="hidden">
+				There are <span id="player-count">X</span> players competing in <span id="game-count">Y</span> games.  <span id="wait-count">Z</span> players are waiting for a game.
+				<span id="player-list"></span>
+				<button id="wait">Put me on the wait list</button>
+				<button id="challenge-server">Challenge the server</button>
+				<button id="challenge-friend">Challenge a friend</button>
+				<div id="challenge-link"></div>
+			</section>
 		</main>
 		<div id="sticky-push"></div>
 	</div>

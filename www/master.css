@@ -12,6 +12,7 @@
 :root
 {
 	--background-color: #cfcfff;
+	--button-padding: 3px;
 	--color: black;
 	--page-width: 80%;
 }
@@ -43,6 +44,27 @@ main
 {
 	margin: 0px auto;
 	width: var(--page-width);
+}
+
+button
+{
+	--background-color: #00008f;
+	background-color: var(--background-color);
+	border: 1px solid var(--background-color);
+	border-radius: var(--button-padding);
+	color: white;
+	padding: var(--button-padding);
+}
+
+button:hover
+{
+	background-color: white;
+	color: var(--background-color);
+}
+
+.hidden
+{
+	display: none;
 }
 
 /*                                         */
