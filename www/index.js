@@ -1,14 +1,14 @@
-openWebSocket();
+getPlayerList();
 
 window.addEventListener ("load", event =>
 	{	event.preventDefault();
 
-		titleFade();
+		splashScreen();
 	})
 
 let count = 0
 
-function titleFade ()
+function splashScreen ()
 {	//	Animate the "splash page"...in quotes because it isn't a separate page, but some animation that happens
 	//	when the page loads...
 
@@ -40,4 +40,24 @@ function titleFade ()
 
 	++count;
 	setTimeout ( titleFade, 800 );
+}
+
+function getPlayerList ()
+{	//	Get a list of current players from the server API...
+
+	ajax ()
+}
+
+function populatePlayerList (data)
+{	//	Get the list of current players into the DOM...
+
+	const playerCount = document.getElementById ("player-count");
+	playerCount.innerText = data.playerCount;
+
+	const gameCount = document.getElementById ("game-count");
+	gameCount.innerText = data.gameCount;
+
+	const waitCount = document.getElementById ("wait-count");
+	waitCount.innerText = data.waitCount;
+
 }

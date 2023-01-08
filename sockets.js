@@ -113,6 +113,16 @@ const WSS =
 							break;
 						}
 
+					case "ping":
+						{	//	The client has sent an automated message to test connectivity...respond to the message
+							//	and set the client's status to true.  ANY message received from the client means the
+							//	client is still connected and active.
+
+							client.send ("pong");
+							setGameStatusTrue (client);
+							break;
+						}
+
 					default:
 						{
 							console.log (chalk.redBright ("WEBserver ERROR"));
