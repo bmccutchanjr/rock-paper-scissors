@@ -66,7 +66,21 @@ function mainClickHandler (event)
 function getRandomName ()
 {
 	ajax ("get", "/api/pick-a-name")
-	.then (data => { document.getElementById ("name-input").value = data; } )
+	.then (data =>
+	{
+		if (data.status == 200)
+		{
+					document.getElementById ("name-input").value = data.responseText;
+					hideElementById ("get-a-name");
+					showElementById ("next-button");
+		}
+		else
+		{
+			alert ("Something went wrong");
+			slert (data.status);
+			alert (data.responseText);
+		}
+	})
 	.catch (error => { console.log (error); } );
 }
 
@@ -76,31 +90,28 @@ function nameInputHandler (event)
 	//	Handle the 'input' event for the name <input> element...basically changes the classList of the associated
 	//	<button> elements to hide or display them
 
-	const next = document.getElementById ("next-button");
-	const pick = document.getElementById ("get-a-name");
-
 	if (event.target.value == "")
 	{
-		hideElement (next);
-		showElement (pick);
+		hideElementById ("next-button");
+		showElementById ("get-a-name");
 	}
 	else
 	{
-		hideElement (pick);
-		showElement (next);
+		hideElementById ("get-a-name");
+		showElementById ("next-button");
 	}
 }
 
-function hideElement (element)
+function hideElementById (id)
 {	//	Use classList.add() to add a class 'hidden' to the specified element
 
-	element.classList.add ("hidden");
+	document.getElementById (id).classList.add ("hidden");
 }
 
-function showElement (element)
+function showElementById (id)
 {	//	Use classList.remove() to remove a class 'hidden' from the specified element
 
-	element.classList.remove ("hidden");
+	document.getElementById (id).classList.remove ("hidden");
 }
 
 function splashScreen (count)

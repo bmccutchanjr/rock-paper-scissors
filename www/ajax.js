@@ -69,13 +69,9 @@ console.log ("rejecting: " + error);
 
 		xml.onreadystatechange = () =>
 		{
-			if (xml.readyState == 4) resolve (xml.responseText);
-//	xml.responseText is just the response text and does not include the status (200, 404, 500, etc.).  Status may be
-//	important to the function that made this request, so it might be better to resolve the entire xml response and let
-//	that function deal with it.  Maybe what I need to do is resolve an object with the status and responseText, but
-//	that's not really any different...
+			if (xml.readyState == 4) resolve (xml);
 		}
 
-		xml.onfailure = (error => reject);
+		xml.onfailure = (error => { reject (error) } );
 	})
 }
