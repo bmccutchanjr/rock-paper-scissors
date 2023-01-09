@@ -6,52 +6,90 @@ window.addEventListener ("load", event =>
 		splashScreen (0);
 
 		const main = document.getElementsByTagName ("main")[0];
-		main.addEventListener ("click", event =>
-		{	event.preventDefault();
-			//	One event listener for all clickable elements in <main>...
+		main.addEventListener ("click", event => { mainClickHandler (event) } );
 
-			const target = event.target;
-			switch (target.getAttribute ("id"))
-			{
-				case "get-a-name":
-					{
-						alert ("get-a-name");
-						break;
-					}
-
-				case "wait":
-					{
-						//	load the game page with no game or opponent...the user will wait until someone else
-						//	loads the page and challenges them.
-						alert ("wait");
-						break;
-					}
-
-				case "challenge-server":
-					{
-						//	load the game page with the server as the opponent...the user makes their selection
-						//	and the server randomly selects an option
-						alert ("challenge-server");
-						break;
-					}
-
-				case "challenge-friend":
-					{
-						//	generate a game ID and display a URL on the screen...the user is responsible for sending
-						//	the URL to someone...load the game page with the generated game ID...the user waits for
-						//	their opponent to load the page
-						alert ("challenge-friend");
-						break;
-					}
-
-				default:
-					{
-						break;
-					}
-			}
-
-		})
+		const name = document.getElementById ("name-input");
+		name.addEventListener ("input", event => { nameInputHandler (event) } );
 	})
+
+function mainClickHandler (event)
+{	event.preventDefault();
+
+	//	One listener for all click events in <main>
+		
+	const target = event.target;
+	switch (target.getAttribute ("id"))
+	{
+		case "get-a-name":
+		{
+			alert ("get-a-name");
+			break;
+		}
+
+		case "wait":
+		{
+			//	load the game page with no game or opponent...the user will wait until someone else
+			//	loads the page and challenges them.
+			alert ("wait");
+			break;
+		}
+
+		case "challenge-server":
+		{
+			//	load the game page with the server as the opponent...the user makes their selection
+			//	and the server randomly selects an option
+			alert ("challenge-server");
+			break;
+		}
+
+		case "challenge-friend":
+		{
+			//	generate a game ID and display a URL on the screen...the user is responsible for sending
+			//	the URL to someone...load the game page with the generated game ID...the user waits for
+			//	their opponent to load the page
+			alert ("challenge-friend");
+			break;
+		}
+
+		default:
+		{
+			break;
+		}
+	}
+}
+
+function nameInputHandler (event)
+{	event.preventDefault ()
+
+	//	Handle the 'input' event for the name <input> element...basically changes the classList of the associated
+	//	<button> elements to hide or display them
+
+	const next = document.getElementById ("next-button");
+	const pick = document.getElementById ("get-a-name");
+
+	if (event.target.value == "")
+	{
+		hideElement (next);
+		showElement (pick);
+	}
+	else
+	{
+		hideElement (pick);
+		showElement (next);
+	}
+}
+
+function hideElement (element)
+{	//	Use classList.add() to add a class 'hidden' to the specified element
+
+	element.classList.add ("hidden");
+}
+
+function showElement (element)
+{	//	Use classList.remove() to remove a class 'hidden' from the specified element
+
+	element.classList.remove ("hidden");
+}
 
 function splashScreen (count)
 {	//	Animate the "splash page"...in quotes because it isn't a separate page, but some animation that happens
@@ -75,23 +113,8 @@ function splashScreen (count)
 	if (count >= message.length)
 	{	//	If count is greater then message.length, the entire splash screen animation has played...change the
 		//	display attribute of the name section and return.
+
 		document.getElementById ("name-section").classList.remove ("hidden");
-		const input = document.getElementById ("name-input");
-		input.addEventListener ("input", event =>
-		{
-			const next = document.getElementById ("next-button");
-			const pick = document.getElementById ("get-a-name");
-			if (input.value == "")
-			{
-				next.classList.add ("hidden");
-				pick.classList.remove ("hidden");
-			} 
-			else
-			{
-				next.classList.remove ("hidden");
-				pick.classList.add ("hidden");
-			} 
-		})
 		return;
 	}
 

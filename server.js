@@ -9,8 +9,6 @@
 //
 //		Without Passport and user authentication, I don't need cookies, a database or session management.
 
-//	02	I'm thinking I don't need to support API's either.  Just static routes and WebSockets
-
 //  Require and configure NPM modules that are required to configure ExpressJS with WS
 
 const chalk = require("chalk");
@@ -41,7 +39,7 @@ app.use(express.json());
 
 //  Require custom modules to handles routes and end-points
 
-//	02	app.use ("/api", require("./end-points/api.js"));
+app.use ("/api", require("./end-points/api.js"));
 app.use ("/", require("./end-points/routes.js"));
 
 // Set the PORT to be used by the server.  If the Node.js process environment has a variable defined called
