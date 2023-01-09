@@ -103,8 +103,6 @@ const WSS =
 
 				setGameStatusTrue (client);
 
-//	messages received from the client are JavaScript objects, not strings.  That's a departure from HTTP where everything
-//	is a string and must be converted to other data types.
 				switch (message.toString())
 				{
 					case "Hello!":

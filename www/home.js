@@ -70,9 +70,9 @@ function getRandomName ()
 	{
 		if (data.status == 200)
 		{
-					document.getElementById ("name-input").value = data.responseText;
-					hideElementById ("get-a-name");
-					showElementById ("next-button");
+			document.getElementById ("name-input").value = data.responseText;
+			hideElementById ("get-a-name");
+			showElementById ("next-button");
 		}
 		else
 		{
