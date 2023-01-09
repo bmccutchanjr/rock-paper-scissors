@@ -10,6 +10,7 @@ const express = require("express");
 
 //	01	const passport = require("./authenticate.js");
 //	01	const people = require("./database/people.js");
+const randomName = require ("./random name/picker.js");
 
 // Configure ExpressJS
 
@@ -22,7 +23,7 @@ router
 	{   //  This always happens whenever any end-point is served in this module.  At the moment I only use it to debug
 		//  routes, but it could be something more useful.
 
-		console.log(chalk.purple("api.js says client is requesting: ", request.url));
+		console.log(chalk.magenta("api.js says client is requesting: ", request.url));
 		next();
 	})
 
@@ -35,8 +36,7 @@ router
 .get("/pick-a-name", function(request, response)
 	{   // Create a random name for the player to use
 
-		response.status(200).sendData ("Mister Peepers");
-
+		response.status(200).send (randomName());
 	})
 
 .post("/some endpoint", function(request, response)

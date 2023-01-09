@@ -9,7 +9,7 @@ window.addEventListener ("load", event =>
 	splashScreen (0);
 
 	//	Add some event listeners...
-	
+
 	const main = document.getElementsByTagName ("main")[0];
 	main.addEventListener ("click", event => { mainClickHandler (event) } );
 
@@ -27,7 +27,7 @@ function mainClickHandler (event)
 	{
 		case "get-a-name":
 		{
-			alert ("get-a-name");
+			getRandomName();
 			break;
 		}
 
@@ -61,6 +61,13 @@ function mainClickHandler (event)
 			break;
 		}
 	}
+}
+
+function getRandomName ()
+{
+	ajax ("get", "/api/pick-a-name")
+	.then (data => { document.getElementById ("name-input").value = data; } )
+	.catch (error => { console.log (error); } );
 }
 
 function nameInputHandler (event)
