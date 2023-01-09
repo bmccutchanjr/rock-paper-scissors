@@ -1,16 +1,21 @@
+//	To start, get the list of available players from the server.  This is an asynchronous procedure and the data
+//	retrieved probably won't change much in just a few minutes.  So there's no reason not to get the player list
+//	right up front, saves the user a few seconds waiting later...
 getPlayerList();
 
 window.addEventListener ("load", event =>
-	{	event.preventDefault();
+{	event.preventDefault();
 
-		splashScreen (0);
+	splashScreen (0);
 
-		const main = document.getElementsByTagName ("main")[0];
-		main.addEventListener ("click", event => { mainClickHandler (event) } );
+	//	Add some event listeners...
+	
+	const main = document.getElementsByTagName ("main")[0];
+	main.addEventListener ("click", event => { mainClickHandler (event) } );
 
-		const name = document.getElementById ("name-input");
-		name.addEventListener ("input", event => { nameInputHandler (event) } );
-	})
+	const name = document.getElementById ("name-input");
+	name.addEventListener ("input", event => { nameInputHandler (event) } );
+})
 
 function mainClickHandler (event)
 {	event.preventDefault();
