@@ -14,6 +14,7 @@ window.addEventListener ("load", event =>
 	main.addEventListener ("click", event => { mainClickHandler (event) } );
 
 	const name = document.getElementById ("name-input");
+	name.addEventListener ("focus", event => { event.target.select(); } );
 	name.addEventListener ("input", event => { nameInputHandler (event) } );
 })
 
@@ -195,6 +196,7 @@ function populatePlayerList (data)
 		div.classList.add ("waiting");
 
 		const button = document.createElement ("button");
+		button.classList.add ("challenge-button");
 		button.innerText = "challenge";
 		button.setAttribute ("gameID", w.gameID);
 		div.append (button);
