@@ -35,15 +35,18 @@ router
 //	02	
 //	02		})
 
+.get("/get-game-id", function(request, response)
+	{   //	Get a Game ID to allow players to matchup
+
+		response.status(200).send (wss.getGameId());
+	})
+
 .get("/get-player-list", function(request, response)
 	{   // Get a list of players connected to the WebSocket server.  Return a count of total number of players, number
 		//	of games being played, number and names of people waiting for a challenger...
 
 		wss.getPlayerList()
-		.then (data =>
-		{
-			response.status(200).send (data);
-		})
+		.then (data => { response.status(200).send (data); } )
 		.catch (error =>
 		{
 			response.status(500).send (error);
@@ -71,7 +74,7 @@ router
 	{   //  Default handler for invalid end-points...all this does is send a 404 status with a custom message.
 
 		response.status(404).send("The service you requested does not exist.");
-		logAnError (error, "404 ERROR");
+		logAnError ("The service you requested does not exist.", "404 ERROR");
 	});
 
 function logAnError (error, heading)

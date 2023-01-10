@@ -60,6 +60,22 @@ function createUniqueID (clientList)
 	return string;
 }
 
+const gameIDs = [];
+
+function createGameId ()
+{	//	Create a new Game ID and double check that it is unique.  Game IDs are a random string of 10 digits.
+
+	let string = "";
+	for (let i=0; i<10; i++)
+	{
+		string += Math.floor (Math.random() * 10);
+	}
+
+	if (gameIDs.indexOf (string) > -1) string = createGameId ();
+
+	return string;
+}
+
 const WSS = 
 {
 	createServer: HTTPServer =>
@@ -145,6 +161,11 @@ const WSS =
 		})
 
 		return server;
+	},
+
+	getGameId: () =>
+	{
+		return createGameId();
 	},
 
 	sendToAll: message =>
