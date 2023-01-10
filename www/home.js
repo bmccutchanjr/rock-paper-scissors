@@ -67,7 +67,12 @@ function mainClickHandler (event)
 				if (data.status == 200)
 				{
 					const url = document.getElementById ("challenge-link");
-					url.innerText = "http://localhost/challenge/" + data.responseText;
+
+					const link = document.createElement ("a");
+					link.href = "http://localhost/challenge/" + data.responseText;
+					link.innerText = "http://localhost/challenge/" + data.responseText;
+
+					url.append (link);
 				}
 			})
 			.catch (error => { alert (error) } );
