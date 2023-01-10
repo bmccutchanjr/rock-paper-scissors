@@ -4,7 +4,9 @@
 // Require the dependencies
 
 const chalk = require("chalk");
+const { Console } = require("console");
 const express = require("express");
+const wss = require("./sockets.js");
 
 //  Require custom middleware
 
@@ -37,25 +39,16 @@ router
 	{   // Get a list of players connected to the WebSocket server.  Return a count of total number of players, number
 		//	of games being played, number and names of people waiting for a challenger...
 
-const obj =
-{	"players": 1992,
-	"games":	678,
-	"wait-list":
-		[
-			"faithful squirrel",
-			"happy bicycle",
-			"juicy trumpet",
-			"ultraviolet thrush",
-			"pretty player",
-			"ageless tiger",
-			"hungry ladybug",
-			"cute bicycle",
-			"pretty badger",
-			"red trombone",
-			"captive kumquat"
-		]
-}
-response.status(200).send (obj);
+		wss.getPlayerList()
+		.then (data =>
+		{
+			response.status(200).send (data);
+		})
+		.catch (error =>
+		{
+			response.status(500).send (error);
+			logAnError (error, "WEBSOCKET SERVER ERROR");
+		})
 	})
 
 .get("/pick-a-name", function(request, response)
@@ -77,9 +70,18 @@ response.status(200).send (obj);
 .use((request, response) =>
 	{   //  Default handler for invalid end-points...all this does is send a 404 status with a custom message.
 
-		console.log (chalk.redBright("ERROR 404"));
-		console.log (chalk.redBright("Someone requested an invalid end-point."));
-		response.status(404).send("So sorry.  The service you requested does not exist on this server.");
+		response.status(404).send("The service you requested does not exist.");
+		logAnError (error, "404 ERROR");
 	});
+
+function logAnError (error, heading)
+{	//	I have a feeling I could be writing this a lot...so make it a function call
+
+	console.log (chalk.red ("======================"));
+	if (heading) console.log (chalk.red (heading.toUpperCase()));
+	console.log (chalk.red (error));
+	console.log (chalk.red ("module: api.js"));
+	console.log (chalk.red ("======================"));
+}
 
 module.exports = router;
