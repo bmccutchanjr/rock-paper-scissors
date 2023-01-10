@@ -60,17 +60,18 @@ function mainClickHandler (event)
 			//	generate a game ID and display a URL on the screen...the user is responsible for sending
 			//	the URL to someone...load the game page with the generated game ID...the user waits for
 			//	their opponent to load the page
-//	05				alert ("challenge-friend");
-ajax ("get", "/api/get-game-id")
-.then (data =>
-{
-	if (data.status == 200)
-	{
-		const url = document.getElementById ("challenge-link");
-		url.innerText = "http://localhost/challenge/" + JSON.parse (data.responseText);
-	}
-})
-.catch (error => { alert (error) } );
+
+			ajax ("get", "/api/get-game-id")
+			.then (data =>
+			{
+				if (data.status == 200)
+				{
+					const url = document.getElementById ("challenge-link");
+					url.innerText = "http://localhost/challenge/" + data.responseText;
+				}
+			})
+			.catch (error => { alert (error) } );
+
 			break;
 		}
 

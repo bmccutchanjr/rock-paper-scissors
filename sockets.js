@@ -66,9 +66,15 @@ function createGameId ()
 {	//	Create a new Game ID and double check that it is unique.  Game IDs are a random string of 10 digits.
 
 	let string = "";
+
 	for (let i=0; i<10; i++)
 	{
-		string += Math.floor (Math.random() * 10);
+//			string += Math.floor (Math.random() * 10);
+const index = Math.floor (Math.random() * 62);
+
+if (index < 10) string += String.fromCharCode (index + 48)
+else if (index < 36) string += String.fromCharCode (index + 55)
+else string += String.fromCharCode (index + 61);
 	}
 
 	if (gameIDs.indexOf (string) > -1) string = createGameId ();
