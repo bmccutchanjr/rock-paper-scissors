@@ -40,3 +40,8 @@ section#name-section input
 	padding: var(--button-padding);
 	width: 100%;
 }
+
+section#players-section div
+{
+	margin-top: 10px;
+}

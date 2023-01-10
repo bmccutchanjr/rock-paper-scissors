@@ -31,6 +31,13 @@ function mainClickHandler (event)
 			break;
 		}
 
+		case "next-button":
+		{
+			hideElementById ("next-button");
+			showElementById ("players-section");
+			break;
+		}
+
 		case "wait":
 		{
 			//	load the game page with no game or opponent...the user will wait until someone else
@@ -93,6 +100,7 @@ function nameInputHandler (event)
 	if (event.target.value == "")
 	{
 		hideElementById ("next-button");
+		hideElementById ("players-section");
 		showElementById ("get-a-name");
 	}
 	else
@@ -156,36 +164,45 @@ function splashScreen (count)
 function getPlayerList ()
 {	//	Get a list of current players from the server API...
 
-//		ajax ()
+	ajax ("get", "/api/get-player-list")
+	.then (data =>
+	{
+		if (data.status == 200)
+		{
+			populatePlayerList (JSON.parse (data.responseText));
+		}
+		else new Error (data.status + ":  " + data.responseText);
+	})
+	.catch (error => { alert (error) } )
 }
 
 function populatePlayerList (data)
 {	//	Get the list of current players into the DOM...
 
 	const playerCount = document.getElementById ("player-count");
-	playerCount.innerText = data.playerCount;
+	playerCount.innerText = data.players;
 
 	const gameCount = document.getElementById ("game-count");
-	gameCount.innerText = data.gameCount;
+	gameCount.innerText = data.games;
 
 	const waitCount = document.getElementById ("wait-count");
-	waitCount.innerText = data.waitCount;
+	waitCount.innerText = data["wait-list"].length;
 
 	const playerList = document.getElementById ("wait-list");
-	data.waitList.forAll (w =>
+	data["wait-list"].forEach (w =>
 	{
 		const div = document.createElement ("div");
 		div.classList.add ("waiting");
 
+		const button = document.createElement ("button");
+		button.innerText = "challenge";
+		button.setAttribute ("gameID", w.gameID);
+		div.append (button);
+
 		const name = document.createElement ("div");
 		name.innerText = w.name;
 		name.setAttribute ("gameID", w.gameID);
-		div.append (name);
-
-		const button = document.createElement ("button");
-		button.innerText = "CHALLENGE";
-		button.setAttribute ("gameID", w.gameID);
-		div.append (button);
+		div.append (w);
 
 		playerList.append (div);
 	})

@@ -33,6 +33,31 @@ router
 //	02	
 //	02		})
 
+.get("/get-player-list", function(request, response)
+	{   // Get a list of players connected to the WebSocket server.  Return a count of total number of players, number
+		//	of games being played, number and names of people waiting for a challenger...
+
+const obj =
+{	"players": 1992,
+	"games":	678,
+	"wait-list":
+		[
+			"faithful squirrel",
+			"happy bicycle",
+			"juicy trumpet",
+			"ultraviolet thrush",
+			"pretty player",
+			"ageless tiger",
+			"hungry ladybug",
+			"cute bicycle",
+			"pretty badger",
+			"red trombone",
+			"captive kumquat"
+		]
+}
+response.status(200).send (obj);
+	})
+
 .get("/pick-a-name", function(request, response)
 	{   // Create a random name for the player to use
 

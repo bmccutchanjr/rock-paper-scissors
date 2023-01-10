@@ -20,12 +20,14 @@
 				<button id="get-a-name">Let us pick a name for you</button>
 				<button id="next-button" class="hidden">next</button>
 			</section>
-			<section id="player-section" class="hidden">
+			<section id="players-section" class="hidden">
 				There are <span id="player-count">X</span> players competing in <span id="game-count">Y</span> games.  <span id="wait-count">Z</span> players are waiting for a game.
-				<span id="player-list"></span>
-				<button id="wait">Put me on the wait list</button>
-				<button id="challenge-server">Challenge the server</button>
-				<button id="challenge-friend">Challenge a friend</button>
+				<div id="wait-list"></div>
+				<div>
+					<button id="wait">Put me on the wait list</button>
+					<button id="challenge-server">Challenge the server</button>
+					<button id="challenge-friend">Challenge a friend</button>
+				</div>
 				<div id="challenge-link"></div>
 			</section>
 		</main>
@@ -33,8 +35,10 @@
 	</div>
 
 	<footer>
-		<div>Rock Paper Scissors &copy; 2022</div>
-		<div>All Rights Reserved</div>
+		<div id="footer">
+			<div>Rock Paper Scissors &copy; 2022</div>
+			<div>All Rights Reserved</div>
+		</div>
 	</footer>
 </body>
 
