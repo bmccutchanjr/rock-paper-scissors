@@ -36,10 +36,25 @@ router
 		response.sendFile(path.join(__dirname, "../www/home.html"));
 	})
 
+.get("/404.html", (request, response) =>
+	{   //  Serve the 404 error page
+
+		response.sendFile(path.join(__dirname, "../www/404.html"));
+	})
+
 .get("/about", (request, response) =>
 	{   //  serve the 'about' page
 
-		response.sendFile(path.join(__dirname, "../www/about/about.html"));
+		response.sendFile(path.join(__dirname, "../www/about.html"));
+	})
+
+.get("/play/:what", (request, response) =>
+	{   //  Serve the routes to start and play a game...  Games may be started by requesting a URL with a game ID, or
+		//	requesting a URL with the string server.  In the latter case, the player's opponent will be the server.
+		//	But it's the same HTML file.  The browser then connects via WebSockets to connect to the game.  I'm only
+		//	including the Dame ID in the URL so the browser script can figure all that out...
+
+		response.sendFile(path.join(__dirname, "../www/game/game.html"));
 	})
 
 //	03B	.get("/404/", (request, response) =>
@@ -63,7 +78,9 @@ router
 //	03B	But it seems that dosn't work the way I expected it to...the browser requested the [age correctly, but it's
 //	03B	requesting the .css from the root folder...so it's back to serving the file for now...
 //	03B		response.redirect ("/404/404.html");
-		response.sendFile(path.join(__dirname, "../www/404.html"));
+//	04	console.log (path.join(__dirname));
+//	04		response.sendFile(path.join(__dirname, "../www/404.html"));
+		response.redirect("/404.html");
 
 		console.log (chalk.red ("HTTP SERVER ALERT"));
 		console.log (chalk.red ("Someone requested a resource that is not found on this server"));

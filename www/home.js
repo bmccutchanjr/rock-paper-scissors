@@ -51,7 +51,8 @@ function mainClickHandler (event)
 		{
 			//	load the game page with the server as the opponent...the user makes their selection
 			//	and the server randomly selects an option
-			alert ("challenge-server");
+//				alert ("challenge-server");
+window.location = "http://localhost/play/server";
 			break;
 		}
 
