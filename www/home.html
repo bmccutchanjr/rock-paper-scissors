@@ -12,13 +12,22 @@
 	<link rel="stylesheet" href="master.css" type="text/css">
 	<link rel="stylesheet" href="home.css" type="text/css">
 	<link rel="stylesheet" href="modal.css" type="text/css">
+	<link rel="stylesheet" href="noscript.css" type="text/css">
 
 	<title>Rock Paper Scissors!</title>
 </head>
 
 <body>
 	<div id="sticky-wrapper">
-		<main>
+		<noscript>
+			<div>
+				<h1>Have you disabled JavaScript?</h1>
+				<p>This site makes extensive use of JavaScript to download data, format it for your screen and allow you to interact with the page.</p>
+				<p>But not to track you, or load annoying ads.</p>
+				<p>Please enable JavaScript...the site simply won't work without it.</p>
+			</div>
+		</noscript>
+		<main class="hidden">
 			<header></header>
 			<section id="name-section" class="hidden">
 				<input id="name-input" placeholder="What name would you like to use while you play today?" type="text">
@@ -39,7 +48,7 @@
 		<div id="sticky-push"></div>
 	</div>
 
-	<footer>
+	<footer class="noscript">
 		<div id="footer">
 			<div>Rock Paper Scissors &copy; 2022</div>
 			<div>All Rights Reserved</div>
