@@ -40,12 +40,20 @@ router
 	})
 
 .get("/about", (request, response) =>
-	{   //  serve the 'about' page
+	{   //  Serve the 'about' page...actually, redirect it the browser to /help/about.html
 
-		response.sendFile(path.join(__dirname, "../www/about.html"));
+		response.redirect ("/help/about.html");
 	})
 
-.get("/play/", (request, response) =>
+.get("/help", (request, response) =>
+	{   //  A route handler for all files in the help folder
+
+		if (request.url == "/help") response.sendFile(path.join(__dirname, "../www/help/about.html"));
+		else if (request.url == "/help/about.html") response.sendFile(path.join(__dirname, "../www/help/about.html"));
+		else if (request.url == "/help/about.css") response.sendFile(path.join(__dirname, "../www/help/about.css"));
+	})
+
+.get("/play", (request, response) =>
 	{   //  Serve the route to start and play a game...  Games may be started by requesting a URL with a game ID, or
 		//	requesting a URL with the string server.  In the latter case, the player's opponent will be the server.
 		//	But it's the same HTML file.  The browser then connects via WebSockets to connect to the game.  I'm only
