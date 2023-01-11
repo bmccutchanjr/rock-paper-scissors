@@ -54,7 +54,10 @@ router
 		//	But it's the same HTML file.  The browser then connects via WebSockets to connect to the game.  I'm only
 		//	including the Dame ID in the URL so the browser script can figure all that out...
 
-		response.sendFile(path.join(__dirname, "../www/game/game.html"));
+//			response.sendFile(path.join(__dirname, "../www/play/game.html"));
+//			response.sendFile(path.join(__dirname, "../www/play/" + request.params.what));
+if (request.params.what == "server") response.sendFile(path.join(__dirname, "../www/play/game.html"));
+else response.sendFile(path.join(__dirname, "../www/play/" + request.params.what));
 	})
 
 //	03B	.get("/404/", (request, response) =>
@@ -80,6 +83,7 @@ router
 //	03B		response.redirect ("/404/404.html");
 //	04	console.log (path.join(__dirname));
 //	04		response.sendFile(path.join(__dirname, "../www/404.html"));
+if (request.url.indexOf (".html") != -1)
 		response.redirect("/404.html");
 
 		console.log (chalk.red ("HTTP SERVER ALERT"));

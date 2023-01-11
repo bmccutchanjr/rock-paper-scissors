@@ -9,23 +9,32 @@
 	<!-- <meta name="theme-color" content="#ffffff"> -->
 	<!-- <link rel="icon" href="favicon.svg" type="text/svg+xml"> -->
 	
-	<link rel="stylesheet" href="master.css" type="text/css">
-	<link rel="stylesheet" href="home.css" type="text/css">
-	<link rel="stylesheet" href="modal.css" type="text/css">
+	<link rel="stylesheet" href="../master.css" type="text/css">
+	<link rel="stylesheet" href="game.css" type="text/css">
+	<link rel="stylesheet" href="../modal.css" type="text/css">
+	<link rel="stylesheet" href="../noscript.css" type="text/css">
 
 	<title>Rock Paper Scissors!</title>
 </head>
 
 <body>
 	<div id="sticky-wrapper">
-		<main>
+		<noscript>
+			<div>
+				<h1>Have you disabled JavaScript?</h1>
+				<p>This site makes extensive use of JavaScript to download data, format it for your screen and allow you to interact with the page.</p>
+				<p>But not to track you, or load annoying ads.</p>
+				<p>Please enable JavaScript...the site simply won't work without it.</p>
+			</div>
+		</noscript>
+		<main class="hidden">
 			<header></header>
 			Let's play Rock, Paper, Scissors!
 		</main>
 		<div id="sticky-push"></div>
 	</div>
 
-	<footer>
+	<footer class="noscript">
 		<div id="footer">
 			<div>Rock Paper Scissors &copy; 2022</div>
 			<div>All Rights Reserved</div>
@@ -34,7 +43,6 @@
 </body>
 
 <script src="websocket.js" language="JavaScript"></script>
-<!-- <script src="ajax.js" language="JavaScript"></script> -->
 <script src="game.js" language="JavaScript"></script>
-<script src="modal.js" language="JavaScript"></script>
+<script src="../modal.js" language="JavaScript"></script>
 </html>
