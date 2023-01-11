@@ -67,6 +67,7 @@ function mainClickHandler (event)
 				if (data.status == 200)
 				{
 					const url = document.getElementById ("challenge-link");
+					if (url.firstChild) url.removeChild (url.firstChild);
 
 					const link = document.createElement ("a");
 					link.href = "http://localhost/challenge/" + data.responseText;
