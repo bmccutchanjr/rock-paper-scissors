@@ -30,9 +30,6 @@ router
 .get("/", (request, response) =>
 	{   //  Serve the home page
 
-//	02			if (!request.user)
-//	02				return response.status(401).sendFile(path.join(__dirname, "../web/login.html"));
-//	02	
 		response.sendFile(path.join(__dirname, "../www/home.html"));
 	})
 
@@ -48,24 +45,22 @@ router
 		response.sendFile(path.join(__dirname, "../www/about.html"));
 	})
 
-.get("/play/:what", (request, response) =>
-	{   //  Serve the routes to start and play a game...  Games may be started by requesting a URL with a game ID, or
+.get("/play/", (request, response) =>
+	{   //  Serve the route to start and play a game...  Games may be started by requesting a URL with a game ID, or
 		//	requesting a URL with the string server.  In the latter case, the player's opponent will be the server.
 		//	But it's the same HTML file.  The browser then connects via WebSockets to connect to the game.  I'm only
 		//	including the Dame ID in the URL so the browser script can figure all that out...
 
-//			response.sendFile(path.join(__dirname, "../www/play/game.html"));
-//			response.sendFile(path.join(__dirname, "../www/play/" + request.params.what));
-if (request.params.what == "server") response.sendFile(path.join(__dirname, "../www/play/game.html"));
-else response.sendFile(path.join(__dirname, "../www/play/" + request.params.what));
-	})
+		//	I guess if I want to serve a 404 page, I can't use a generic responce with request.url.  IMUST HAVE a
+		//	response for each and every file, otherwise the server gets lost in the wilderness looking for a file that
+		//	doesn't exist.
 
-//	03B	.get("/404/", (request, response) =>
-//	03B		{   //  A generic route handler
-//	03B	
-//	03B	//	03A		response.sendFile(path.join(__dirname, "../www/404/" + request.url));
-//	03B			response.sendFile(path.join(__dirname, "../www/404/404.html"));
-//	03B		})
+		if (request.url == "/play/") response.sendFile(path.join(__dirname, "../www/play/game.html"));
+		else if (request.url == "/play/game.html") response.sendFile(path.join(__dirname, "../www/play/game.html"));
+		else if (request.url == "/play/game.css") response.sendFile(path.join(__dirname, "../www//play/game.css"));
+		else if (request.url == "/play/game.js") response.sendFile(path.join(__dirname, "../www//play/game.hs"));
+		else if (request.url == "/play/websocket.js") response.sendFile(path.join(__dirname, "../www//play/websocket.js"));
+	})
 
 .use(express.static(path.join(__dirname, "../www")))
 
@@ -83,7 +78,7 @@ else response.sendFile(path.join(__dirname, "../www/play/" + request.params.what
 //	03B		response.redirect ("/404/404.html");
 //	04	console.log (path.join(__dirname));
 //	04		response.sendFile(path.join(__dirname, "../www/404.html"));
-if (request.url.indexOf (".html") != -1)
+//	if (request.url.indexOf (".html") != -1)
 		response.redirect("/404.html");
 
 		console.log (chalk.red ("HTTP SERVER ALERT"));

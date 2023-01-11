@@ -58,7 +58,14 @@ function mainClickHandler (event)
 			//	load the game page with the server as the opponent...the user makes their selection
 			//	and the server randomly selects an option
 //				alert ("challenge-server");
-window.location = "http://localhost/play/server";
+//	It doesn't seem like I can code the game configuration into the url.  The next page does know what the url I
+//	requested is (play against the server, play a friend's challenge or wait for a challenger) but the server's
+//	route handler gets very complicated AND no longer works with the 404 page.  The server apparently thinks it
+//	has something to serve and gets lost in the weeds looking for it.
+//
+//	I need a cookie... 
+			setCookie ("opponent", "server");
+			window.location = "http://localhost/play";
 			break;
 		}
 
@@ -93,6 +100,12 @@ window.location = "http://localhost/play/server";
 			break;
 		}
 	}
+}
+
+function setCookie (name, value)
+{	//	Cookie setter.  Cookies are used to communicate what game option the user has selected to the game page.
+
+	document.cookie = name + "=" + value + "; path=/; max-age=86400;";
 }
 
 function getRandomName ()
