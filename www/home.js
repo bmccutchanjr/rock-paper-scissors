@@ -20,7 +20,6 @@ window.addEventListener ("load", event =>
 	main.addEventListener ("click", event => { mainClickHandler (event) } );
 
 	const name = document.getElementById ("name-input");
-	name.addEventListener ("focus", event => { event.target.select(); } );
 	name.addEventListener ("input", event => { nameInputHandler (event) } );
 })
 
