@@ -1,3 +1,6 @@
+let domFlag = false;
+let wssFlag = false;
+
 openWebSocket()
 .then (wss =>
 {
@@ -11,14 +14,28 @@ openWebSocket()
 //	a flag in window.eventListener() and call the same function there, once everything is ready to go...
 //	the function only changes the display attribute if both flags are set...
 	getCookie ("opponent");
-	
+
 	wssFlag = true;
 	showDOMElements();
 })
 .catch (error => { alert (error) } );
 
-let domFlag = false;
-let wssFlag = false;
+prefetchImages ();
+
+function prefetchImages ()
+{	//	I'm using images in the rock, paper and scissors buttons and alertnate images in hover styles.  The browser isn't
+	//	going to request the image until they are referenced and that vreates some lag time between when the mouse rolls
+	//	over a button and the new image is displayed.  I'm hoping that by requesting those images here (even though I'm
+	//	not using them here) the browser will cache the images and have them available for the button hover event.
+
+	let image = document.createElement ("img");
+	image.src = "../images/rock-white.svg";
+	image.src = "../images/rock-black.svg";
+	image.src = "../images/paper-white.svg";
+	image.src = "../images/paper-black.svg";
+	image.src = "../images/scissors-white.svg";
+	image.src = "../images/scissors-black.svg";
+}
 
 window.addEventListener ("load", event =>
 {	event.preventDefault();
