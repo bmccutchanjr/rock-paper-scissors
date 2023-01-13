@@ -28,8 +28,28 @@
 			</div>
 		</noscript>
 		<main class="hidden">
-			<header></header>
-			Let's play Rock, Paper, Scissors!
+			<!-- <header></header> -->
+			<section id="button-section">
+				<div class="button-wrapper">
+					<button><img src="../images/rock-white.svg" id="rock"></button>
+					<div class="text">Rock</div>
+				</div>
+				<div class="button-wrapper">
+					<button><img src="../images/paper-white.svg" id="paper"></button>
+					<div class="text">Rock</div>
+				</div>
+				<div class="button-wrapper">
+					<button><img src="../images/scissors-white.svg" id="scissors"></button>
+					<div class="text">Scissors</div>
+				</div>
+			</section>
+			<section id="message-section">
+				<div id="input">
+					<input placeholder="You can send text messages to your opponent" type="text" onfocus="this.select();">
+					<button id="send">SEND</button>
+				</div>
+				<div id="messages"></div>
+			</section>
 		</main>
 		<div id="sticky-push"></div>
 	</div>

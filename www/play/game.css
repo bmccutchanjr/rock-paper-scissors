@@ -1,0 +1,135 @@
+body
+{
+	background-color: #cfcfff;
+}
+
+#sticky-wrapper
+{
+	display: flex;
+		flex-direction: column;
+		flex-wrap: nowrap;
+		justify-content: space-between;
+}
+
+main
+{
+	display: flex;
+		flex-direction: column;
+		flex-wrap: nowrap;
+		justify-content: space-between;
+	flex-grow: 1;
+	flex-shrink: 0;
+	height: 100%;
+		min-height: 100%;
+	margin-bottom: 42px;
+	padding-top: 20px;
+}
+
+section#button-section
+{
+	display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		justify-content: space-between;
+	flex-grow: 0;
+	flex-shrink: 0;
+	margin: 0px auto;
+}
+
+@media screen and (max-width: 400px)
+{
+	main
+	{
+		width: 95%;
+	}
+}
+
+.button-wrapper
+{
+	height: auto;
+	width: 30%;
+}
+
+.button-wrapper button
+{
+	border: none;
+	border-radius: 10%;
+}
+
+.button-wrapper img
+{
+	height: 100%;
+	width: 100%;
+}
+
+#rock:hover
+{
+	content: url("../images/rock-black.svg");
+}
+
+#paper:hover
+{
+	content: url("../images/paper-black.svg");
+}
+
+#scissors:hover
+{
+	content: url("../images/scissors-black.svg");
+}
+
+.button-wrapper .text
+{
+	margin-top: 5px;
+	text-align: center;
+}
+
+section#message-section
+{
+	display: flex;
+		flex-direction: column;
+		flex-wrap: nowrap;
+		justify-content: space-between;
+	flex-grow: 1;
+	flex-shrink: 0;
+	height: 20%;
+	margin-top: 30px;
+}
+
+div#messages
+{
+	background-color: white;
+	border: 2px solid #00008f;
+	border-radius: 10px;
+	flex-grow: 1;
+	flex-shrink: 0;
+	overflow: clip;
+	height: 100px;
+	width: 100%;
+}
+
+div#input
+{
+	display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		justify-content: space-between;
+	flex-grow: 0;
+	flex-shrink: 0;
+	margin-bottom: 10px;
+	width: 100%;
+}
+
+div#input *
+{
+	flex-grow: 0;
+	flex-shrink: 0;
+}
+
+div#input input
+{
+	border: 1px solid #00008f;
+	border-radius: var(--button-padding);
+	flex-grow: 1;
+	flex-shrink: 1;
+	margin-right: 30px;
+}
