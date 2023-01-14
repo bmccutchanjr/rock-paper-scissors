@@ -1,8 +1,6 @@
 //	This module is used to open a WebSocket connection to the server and handle communications.  It uses the browser
 //	implementation of the WebSocket protocol.
 
-//	01	"ping" is an automatic function...I don't need this code
-
 let wss = {};
 
 function openWebSocket ()

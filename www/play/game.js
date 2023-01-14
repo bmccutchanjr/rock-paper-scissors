@@ -32,6 +32,18 @@ openWebSocket()
 })
 .catch (error => { alert (error) } );
 
+window.addEventListener ("load", event =>
+{	event.preventDefault();
+
+	//	If this is running then the browser has not disabled scripts...remove the noscript and hidden classes
+	//	from <footer> and <main> respectively
+
+	document.getElementsByTagName ("footer")[0].classList.remove ("noscript");
+
+	DOMIsLoaded = true;
+	showDOMElements();
+})
+
 prefetchImages ();
 
 function prefetchImages ()
@@ -48,18 +60,6 @@ function prefetchImages ()
 	image.src = "../images/scissors-white.svg";
 	image.src = "../images/scissors-black.svg";
 }
-
-window.addEventListener ("load", event =>
-{	event.preventDefault();
-
-	//	If this is running then the browser has not disabled scripts...remove the noscript and hidden classes
-	//	from <footer> and <main> respectively
-
-	document.getElementsByTagName ("footer")[0].classList.remove ("noscript");
-
-	DOMIsLoaded = true;
-	showDOMElements();
-})
 
 let DOMIsLoaded = false;
 let wssIsReady = false;

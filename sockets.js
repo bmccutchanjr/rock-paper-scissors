@@ -2,14 +2,7 @@
 //	from client devices.  It uses the ExpressJS server that is configured in server.js.
 //
 
-//	01	Coding the client to monitor server and network availability seems to be more trouble than it's worth,
-//	01	so the server is no longer going to listen for "ping" messages from the client...
-
-//	02			A switch no longer seems th best way to navigate incoming client messages.  Some messages are straight
-//	02			up text and others are objects with data...and property names may not be consistent.  Much as I like
-//	02		switch, it doesn't seem the best approach at the moment.
-
-const chalk = require("chalk");			//	chalk allows console.log() to use color, for clarity
+const chalk = require("chalk");			//	for clarity...chalk allows console.log() to use color
 const ws = require("ws");
 
 function configureChallenge (client, opponent)
@@ -154,21 +147,12 @@ const WSS =
 //	This event handler could get quite large...it may be better to move it into a separate function.  For now, though,
 //	I'll leave it here...
 				message = message.toString();
-//	13	client no longer sends this message...
-//	13					if (message == "hello")
-//	13					{
-//	13	// ignore this message
-//	13	
-//	13					}
-//	13					else if (message == "wait list")
 				if (message == "wait list")
 				{
 					// eventually do something here...
 				}
 				else
 				{
-//	console.log ("message may be JSON object");
-//	console.log (typeof message);
 					try
 					{
 						object = JSON.parse (message);
