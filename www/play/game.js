@@ -12,23 +12,22 @@ document.addEventListener ("server-ready", event =>
 openWebSocket()
 .then (wss =>
 {
-//	This is where I initiate the game by telling the WebSocket server how the user has decided to play.
-//
-//	get cookie 'opponent' -- that tells the server how to configure...
-//	tell the server
-//	once the server has reponded in the affirmative, change the display attribute of the chat space and
-//	game buttons...the DOM must be loaded, but it probably will be by this time...or I could could set a
-//	flag to show the server is ready to go and call a function to change the display.  I also need to set
-//	a flag in window.eventListener() and call the same function there, once everything is ready to go...
-//	the function only changes the display attribute if both flags are set...
+	//	Initiate the game by telling the WebSocket server how the user has decided to play.  That choice
+	//	was made in home.html and passed to this page with a cookie.  So...get the cookie.
 
 	const config = getCookie ("opponent")
+
+	//	...and send a message to the server
+
 	if (config) wssSend ( { "challenge": getCookie ("opponent") } ); 
 	else
 	{
 		alert ("wait list");
 		wssSend ("wait list");
 	}
+
+	//	websocket.js listenes for the cooresponding reponse from the server and once recieved, dispatches an event
+	//	to configure this page and allow the user to play.
 })
 .catch (error => { alert (error) } );
 
@@ -107,9 +106,8 @@ function showDOMElements ()
 		{	//	Because I use an id (#message-section) to reference this element, I can't override the display
 			//	property with a class.  In fact, I can't even override another class because the element has an id.
 			//	So it seems to dynamically hide / display this element, I can have no display property in any CSS
-			//	rule applied to the element and that means I can have no display property in the rule applied to the
-			//	element.  The flex-box configuration nust in be a dynamically assigned class as well.  SO now,
-			//	remove class hidden from the classList and add class flex-box.
+			//	rule applied to the element.  The flex-box configuration nust in be a dynamically assigned class as
+			//	well.  So now, remove class hidden from the classList and add class flex-box.
 
 			document.getElementById ("message-section").classList.add ("flex-box");
 			document.getElementById ("message-section").classList.remove ("hidden");
