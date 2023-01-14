@@ -1,7 +1,12 @@
 //	This module is used to open a WebSocket connection to the server and handle communications.  It uses the browser
 //	implementation of the WebSocket protocol.
 
-const wss = {};
+//	01	"ping" is an automatic function...I don't need this code
+
+//	02	"welcome aboard" was a default action I used while setting up the server.  I don't need it any longer.
+
+//	10	const wss = {};
+let wss = {};
 
 function openWebSocket ()
 {	//  Open a WebSocket to the test server and add some event listeners
@@ -10,7 +15,7 @@ function openWebSocket ()
 
 	return new Promise ((resolve, reject) =>
 	{	
-		const wss = new WebSocket ("ws://" + window.location.host);
+		wss = new WebSocket ("ws://" + window.location.host);
 
 		//	In the interest of making this code a little more portable, use window.location.host for the URL rather
 		//	than hardcoding it.  The HTTP and WebSocket servers are on the same machine.
@@ -22,42 +27,37 @@ function openWebSocket ()
 		wss.onmessage = function (event)
 		{   //  A message was received from the server
 
-			switch (event.data)
+			// if (event.data == "server ready") document.dispatchEvent (new Event ("server-ready"));
+			// //	"server-ready" indicates the server has configured a game for this player and is ready to go.  Configure the DOM
+			// //	elements so the user can play also.
+if (event.data == "server ready")
+{
+	alert ("dispatching new Event ('server-ready'");
+	document.dispatchEvent (new Event ("server-ready"));
+//	"server-ready" indicates the server has configured a game for this player and is ready to go.  Configure the DOM
+//	elements so the user can play also.
+}
+			else if (event.data == "results") document.dispatchEvent (new Evet ("you-win"));
+			else
 			{
-				case "ping":
-				{   //  This is a message sent from the server at regular intervals to verify that all of the connections it has opened
-					//  are still active.  If a user closed the web page or navigated away from this page the connection established here
-					//  would no longer be active and if the server didn't clean up the garbage occasionally it would eventiually crash
-					//  and burn.
-
-					wss.send ("pong");
-					break;
-				}
-
-				case "Welcome aboard!":
-				{   //  This is the server's response to this browser's successful connection.  There really isn't much to do with
-					//  it.  But its not an error either, so accomodate it.
-					break;
-				}
-
-				default:
-				{
-					const data = JSON.parse(event.data);
-
-					switch (data.message)
-					{
-						case "Availability Change":
-						{
-							changeAvailability (data)
-							break;
-						}
-						default:
-						{
-							modal ("WEBSOCKET ERROR:\n\nAn unsupported message was received from the server", buzz);
-						}
-					}
-				}
+				alert ("WEBSOCKET ERROR:\n\nThe WebSocket received an unsupported message.  See console.log for more details");
+				console.log ("WEBSOCKET ERROR:");
+				console.log ("An unsupported message was received:");
+				console.log (event.data);
 			}
 		}
+
 	})
+}
+
+function wssSend (message)
+{	//	Unlike HTTP, WebSockets sends all messages as binary data which is received as a Buffer object.  Some messages
+	//	sent to the server are simply string types and the server has no problem converting those to back to strings
+	//	so they can be used.  But there does not seem to be a simple way to convert a Buffer into a useable object.
+	//
+	//  But converting an object to a string type is trivial.  So, everything sent to the server must be a string
+	//	including objects.
+
+	if (typeof message == "object") message = JSON.stringify (message);
+	wss.send (message);
 }

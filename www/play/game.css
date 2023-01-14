@@ -85,14 +85,23 @@ section#button-section
 
 section#message-section
 {
-	display: flex;
-		flex-direction: column;
-		flex-wrap: nowrap;
-		justify-content: space-between;
 	flex-grow: 1;
 	flex-shrink: 0;
 	height: 20%;
 	margin-top: 30px;
+}
+
+section#message-section.flex-box
+{	/*	Because I use an id (#message-section) to reference this element, I can't override the display property		*/
+	/*	with a class.  In fact, I can't even override another class because the element has an id.  So it seems to	*/
+	/*	dynamically hide / display this element, I can have no display property in any CSS rule applied to the		*/
+	/*	element and that means I can have no display property in the rule applied to the element.  The flex-box		*/
+	/*	configuration nust in be a dynamically assigned class as well.												*/
+
+	display: flex;
+		flex-direction: column;
+		flex-wrap: nowrap;
+		justify-content: space-between;
 }
 
 div#messages

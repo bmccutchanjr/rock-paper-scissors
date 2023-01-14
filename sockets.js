@@ -2,15 +2,39 @@
 //	from client devices.  It uses the ExpressJS server that is configured in server.js.
 //
 
+//	01	Coding the client to monitor server and network availability seems to be more trouble than it's worth,
+//	01	so the server is no longer going to listen for "ping" messages from the client...
+
+//	02			A switch no longer seems th best way to navigate incoming client messages.  Some messages are straight
+//	02			up text and others are objects with data...and property names may not be consistent.  Much as I like
+//	02		switch, it doesn't seem the best approach at the moment.
+
 const chalk = require("chalk");			//	chalk allows console.log() to use color, for clarity
 const ws = require("ws");
+
+function configureChallenge (client, opponent)
+{	//	This is triggered when a message is received indicating a new user has selected an opponent.  That opponent
+	//	might be the server or some other player on the waiting list.  It's also possible the player has decided to
+	//	wait for someone to challenge them.
+
+	if (opponent == "server") client.game.opponent = "server";
+	else
+	{
+
+//	other options here...
+
+	}
+
+
+	client.send ("server ready");
+}
 
 let interval = undefined;				//	initialze a variable for setInterval
 
 function setGameStatusTrue (client) { client.game.status = true };
 
 function testConnections (clientList)
-{	//	Interate through the set of clients and remove any that are not responding.
+{	//	Iterate through the set of clients and remove any that are not responding.
 	//
 	//	The client's status is set to true everytime a message is recieved from the client, or when the client
 	//	responds to a ping.  So if the client's status is false, it hasn't sent a message or responded to a ping
@@ -91,7 +115,7 @@ const WSS =
 
 		server.on ("connection", client =>
 		{
-			client.send ("Welcome aboard!");
+//	06				client.send ("Welcome aboard!");
 			client.ping();
 
 			client.game =
@@ -106,57 +130,107 @@ const WSS =
 			//	Now add appropriate event handlers for this client...
 
 			client.on ("close", event =>
-			{	//	The CLIENT is closing this connection and has emitted a close event to inform the  server.  It's
+			{	//	The CLIENT is closing this connection and has sent a message to inform the  server.  It's
 				//	a good time for the server to clean up and destroy the associated client object.
 
 				client.close();
 			}),
 
-			client.on ("pong", event =>
-			{
-				setGameStatusTrue (client);
-			}),
+			client.on ("pong", event => { setGameStatusTrue (client); } ),
 
+//	02				client.on ("message", message =>
+//	02				{   //  Listen for messages from this CLIENT
+//	02	
+//	02					//	First things first...any message recieved from a client means the client is active.  Set active status
+//	02					//	to true.
+//	02	
+//	02					setGameStatusTrue (client);
+//	02	
+//	02						switch (message.toString())
+//	02						{
+//	02							case "Hello!":
+//	02								{	//  A client has connected and sent this message.  It doesn't mean anything, ignore it...
+//	02									setGameStatusTrue (client);
+//	02								break;
+//	02							}
+//	02	
+//	02	//	01						case "ping":
+//	02	//	01							{	//	The client has sent an automated message to test connectivity...respond to the message
+//	02	//	01								//	and set the client's status to true.  ANY message received from the client means the
+//	02	//	01								//	client is still connected and active.
+//	02	//	01	
+//	02	//	01								client.send ("pong");
+//	02	//	01								setGameStatusTrue (client);
+//	02	//	01								break;
+//	02	//	01							}
+//	02	
+//	02						default:
+//	02							{
+//	02								console.log (chalk.redBright ("WEBserver ERROR"));
+//	02								console.log (chalk.redBright ("Unknown message received"));
+//	02								console.log (chalk.redBright (message));
+//	02								break;
+//	02							}
+//	02					}
+//	02				});
+//	02			});
 			client.on ("message", message =>
 			{   //  Listen for messages from this CLIENT
 
-				//	First things first...any message recieved from a client means the client is active.  Set active status
-				//	to true.
-
-				setGameStatusTrue (client);
-
-				switch (message.toString())
-				{
-					case "Hello!":
-						{	//  A client has connected and sent this message.  It doesn't mean anything, ignore it...
-							setGameStatusTrue (client);
-							break;
-						}
-
-					case "ping":
-						{	//	The client has sent an automated message to test connectivity...respond to the message
-							//	and set the client's status to true.  ANY message received from the client means the
-							//	client is still connected and active.
-
-							client.send ("pong");
-							setGameStatusTrue (client);
-							break;
-						}
-
-					default:
-						{
-							console.log (chalk.redBright ("WEBserver ERROR"));
-							console.log (chalk.redBright ("Unknown message received"));
-							console.log (chalk.redBright (message));
-							break;
-						}
-				}
-			});
+				//	All messages sent by WebSOcket are binary data whic is recieved here as a Buffer object.  This
+				//	can be converted into a string type easily, but messages sent from the client may be JSON objects.
+				//	There seems to be no way to convert a Buffer into a useable object.
+				//
+				//	But converting a string to an object is trivial.  It seems the simplest solution is to ensure that
+				//	my client always sends a string type, regardless of what the actual data type is.  This handler
+				//	converts all messages to string types and tries to handle them.  Anything that could not be handled
+				//	can be assumed to be a stringified object, so we'll parse the recieved message and try to handle the
+				//	result.
+				//
+				//	Anything not handled can be assumed to be an error.
+//	This event handler could get quite large...it may be better to move it into a separate function.  For now, though,
+//	I'll leave it here...
+message = message.toString();
+if (message == "hello")
+{
+// ignore this message
+}
+else if (message == "wait list")
+{
+// ignore this message
+}
+else
+console.log ("message may be JSON object");
+console.log (typeof message);
+try
+{
+	object = JSON.parse (message);
+	if (typeof object == "object")
+	{
+		console.log (object);
+		if (object.challenge) configureChallenge (client, message.challenge);
+		else if (object.message) forwardThisMessage (client, message.message);
+		else if (object.selection) rockPaperScissors (client, message.selection);
+		else
+		{
+			console.log (chalk.redBright ("WEBSOCKET ERROR"));
+			console.log (chalk.redBright ("Unknown message received"));
+			console.log (chalk.redBright (message));
+		}
+	}
+}
+catch (error)
+{
+	console.log (chalk.redBright ("WEBSOCKET ERROR"));
+	console.log (chalk.redBright (error));
+	console.log (chalk.redBright ("actual message recieved: " + message));
+}
+			})
 		});
 
 		server.on ("error", error =>
 		{
-			console.log (chalk.redBright ("WEBserver ERROR"));
+			console.log (chalk.redBright ("WEBSOCKET ERROR"));
 			console.log (chalk.redBright (error));
 		});
 
