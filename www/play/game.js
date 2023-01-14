@@ -1,6 +1,3 @@
-//	04	let domFlag = false;
-//	04	let wssFlag = false;
-
 document.addEventListener ("server-ready", event =>
 {	//	A custom event triggered by a WebSocket message recieved from the server.
 
@@ -25,7 +22,6 @@ openWebSocket()
 //	a flag in window.eventListener() and call the same function there, once everything is ready to go...
 //	the function only changes the display attribute if both flags are set...
 
-wssSend (["Glory", "be", "to", "God!"]);
 	const config = getCookie ("opponent")
 	if (config) wssSend ( { "challenge": getCookie ("opponent") } ); 
 	else

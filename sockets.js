@@ -93,12 +93,11 @@ function createGameId ()
 
 	for (let i=0; i<10; i++)
 	{
-//			string += Math.floor (Math.random() * 10);
-const index = Math.floor (Math.random() * 62);
+		const index = Math.floor (Math.random() * 62);
 
-if (index < 10) string += String.fromCharCode (index + 48)
-else if (index < 36) string += String.fromCharCode (index + 55)
-else string += String.fromCharCode (index + 61);
+		if (index < 10) string += String.fromCharCode (index + 48)
+		else if (index < 36) string += String.fromCharCode (index + 55)
+		else string += String.fromCharCode (index + 61);
 	}
 
 	if (gameIDs.indexOf (string) > -1) string = createGameId ();
@@ -115,8 +114,8 @@ const WSS =
 
 		server.on ("connection", client =>
 		{
-//	06				client.send ("Welcome aboard!");
 			client.ping();
+//	I don't seem to be monitoring server.clients.  What happened to that?
 
 			client.game =
 			{
@@ -138,42 +137,6 @@ const WSS =
 
 			client.on ("pong", event => { setGameStatusTrue (client); } ),
 
-//	02				client.on ("message", message =>
-//	02				{   //  Listen for messages from this CLIENT
-//	02	
-//	02					//	First things first...any message recieved from a client means the client is active.  Set active status
-//	02					//	to true.
-//	02	
-//	02					setGameStatusTrue (client);
-//	02	
-//	02						switch (message.toString())
-//	02						{
-//	02							case "Hello!":
-//	02								{	//  A client has connected and sent this message.  It doesn't mean anything, ignore it...
-//	02									setGameStatusTrue (client);
-//	02								break;
-//	02							}
-//	02	
-//	02	//	01						case "ping":
-//	02	//	01							{	//	The client has sent an automated message to test connectivity...respond to the message
-//	02	//	01								//	and set the client's status to true.  ANY message received from the client means the
-//	02	//	01								//	client is still connected and active.
-//	02	//	01	
-//	02	//	01								client.send ("pong");
-//	02	//	01								setGameStatusTrue (client);
-//	02	//	01								break;
-//	02	//	01							}
-//	02	
-//	02						default:
-//	02							{
-//	02								console.log (chalk.redBright ("WEBserver ERROR"));
-//	02								console.log (chalk.redBright ("Unknown message received"));
-//	02								console.log (chalk.redBright (message));
-//	02								break;
-//	02							}
-//	02					}
-//	02				});
-//	02			});
 			client.on ("message", message =>
 			{   //  Listen for messages from this CLIENT
 
@@ -190,41 +153,46 @@ const WSS =
 				//	Anything not handled can be assumed to be an error.
 //	This event handler could get quite large...it may be better to move it into a separate function.  For now, though,
 //	I'll leave it here...
-message = message.toString();
-if (message == "hello")
-{
-// ignore this message
-}
-else if (message == "wait list")
-{
-// ignore this message
-}
-else
-console.log ("message may be JSON object");
-console.log (typeof message);
-try
-{
-	object = JSON.parse (message);
-	if (typeof object == "object")
-	{
-		console.log (object);
-		if (object.challenge) configureChallenge (client, message.challenge);
-		else if (object.message) forwardThisMessage (client, message.message);
-		else if (object.selection) rockPaperScissors (client, message.selection);
-		else
-		{
-			console.log (chalk.redBright ("WEBSOCKET ERROR"));
-			console.log (chalk.redBright ("Unknown message received"));
-			console.log (chalk.redBright (message));
-		}
-	}
-}
-catch (error)
-{
-	console.log (chalk.redBright ("WEBSOCKET ERROR"));
-	console.log (chalk.redBright (error));
-	console.log (chalk.redBright ("actual message recieved: " + message));
-}
+				message = message.toString();
+//	13	client no longer sends this message...
+//	13					if (message == "hello")
+//	13					{
+//	13	// ignore this message
+//	13	
+//	13					}
+//	13					else if (message == "wait list")
+				if (message == "wait list")
+				{
+					// eventually do something here...
+				}
+				else
+				{
+//	console.log ("message may be JSON object");
+//	console.log (typeof message);
+					try
+					{
+						object = JSON.parse (message);
+						if (typeof object == "object")
+						{
+							console.log (object);
+							if (object.challenge) configureChallenge (client, message.challenge);
+							else if (object.message) forwardThisMessage (client, message.message);
+							else if (object.selection) rockPaperScissors (client, message.selection);
+							else
+							{
+								console.log (chalk.redBright ("WEBSOCKET ERROR"));
+								console.log (chalk.redBright ("Unknown message received"));
+								console.log (chalk.redBright (message));
+							}
+						}
+					}
+					catch (error)
+					{
+						console.log (chalk.redBright ("WEBSOCKET ERROR"));
+						console.log (chalk.redBright (error));
+						console.log (chalk.redBright ("actual message recieved: " + message));
+					}
+				}
 			})
 		});
 

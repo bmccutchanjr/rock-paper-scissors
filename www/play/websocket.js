@@ -3,9 +3,6 @@
 
 //	01	"ping" is an automatic function...I don't need this code
 
-//	02	"welcome aboard" was a default action I used while setting up the server.  I don't need it any longer.
-
-//	10	const wss = {};
 let wss = {};
 
 function openWebSocket ()
@@ -27,16 +24,16 @@ function openWebSocket ()
 		wss.onmessage = function (event)
 		{   //  A message was received from the server
 
-			// if (event.data == "server ready") document.dispatchEvent (new Event ("server-ready"));
-			// //	"server-ready" indicates the server has configured a game for this player and is ready to go.  Configure the DOM
-			// //	elements so the user can play also.
-if (event.data == "server ready")
-{
-	alert ("dispatching new Event ('server-ready'");
-	document.dispatchEvent (new Event ("server-ready"));
-//	"server-ready" indicates the server has configured a game for this player and is ready to go.  Configure the DOM
-//	elements so the user can play also.
-}
+			if (event.data == "server ready") document.dispatchEvent (new Event ("server-ready"));
+			//	"server-ready" indicates the server has configured a game for this player and is ready to go.  Configure the DOM
+			//	elements so the user can play also.
+// if (event.data == "server ready")
+// {
+// 	alert ("dispatching new Event ('server-ready'");
+// 	document.dispatchEvent (new Event ("server-ready"));
+// //	"server-ready" indicates the server has configured a game for this player and is ready to go.  Configure the DOM
+// //	elements so the user can play also.
+// }
 			else if (event.data == "results") document.dispatchEvent (new Evet ("you-win"));
 			else
 			{
