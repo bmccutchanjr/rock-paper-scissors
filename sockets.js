@@ -2,102 +2,12 @@
 //	from client devices.  It uses the ExpressJS server that is configured in server.js.
 //
 
+//	01	No longer tracking Game Id, but the code remains in case I decide to bring it back...
+
 const chalk = require("chalk");			//	for clarity...chalk allows console.log() to use color
 const ws = require("ws");
 
-//	01	function configureChallenge (client, opponent)
-//	01	{	//	This is triggered when a message is received indicating a new user has selected an opponent.  That opponent
-//	01		//	might be the server or some other player on the waiting list.  It's also possible the player has decided to
-//	01		//	wait for someone to challenge them.
-//	01	
-//	01		if (opponent == "server") client.game.opponent = "server";
-//	01		else
-//	01		{
-//	01	
-//	01	//	other options here...
-//	01	
-//	01		}
-//	01	
-//	01	
-//	01		client.send ("server ready");
-//	01	}
-
 let interval = undefined;				//	initialze a variable for setInterval
-
-//	01	function setGameStatusTrue (client) { client.game.status = true };
-//	01	
-//	01	function testConnections (clientList)
-//	01	{	//	Iterate through the set of clients and remove any that are not responding.
-//	01		//
-//	01		//	The client's status is set to true everytime a message is recieved from the client, or when the client
-//	01		//	responds to a ping.  So if the client's status is false, it hasn't sent a message or responded to a ping
-//	01		//	for 5 minutes (the repeat interval of this function).
-//	01		//
-//	01		//	5 minutes seems to be a sufficiently long period of time.
-//	01		//
-//	01		//	So at this point...
-//	01		//
-//	01		//	Interate through the list of clients and close any with a status of false.  And I might want to terminate
-//	01		//	any clients that are closing.  Same idea...they were told to close and are still in the process 5 minutes
-//	01		//	later.  It shouldn't happen, but the function is provided by the developer's for just this reason.
-//	01	
-//	01		clientList.forEach (c =>
-//	01		{
-//	01			if (c.closing) c.terminate()
-//	01			else if (c.game.status == false) c.close();
-//	01		})
-//	01	
-//	01		// And the second go round...ping all of the remaining clients
-//	01	
-//	01		clientList.forEach (c =>
-//	01		{	//	For each client set the status of to false, then ping it.  If the client responds, the client
-//	01			//	pong event handler will set the status back to true.
-//	01	
-//	01			c.game.status = false;
-//	01			c.ping()
-//	01		});
-//	01	}
-
-//	02	function createUniqueID (clientList)
-//	02	{	//	Create a random string of 10 digits and verify it is unique.  If this string is in use, do it again...
-//	02	
-//	02		let string = "";
-//	02		for (let i=0; i<10; i++)
-//	02		{
-//	02			string += Math.floor (Math.random() * 10);
-//	02		}
-//	02	
-//	02		clientList.forEach (c =>
-//	02		{
-//	02			if (c.game != undefined)
-//	02				if (c.game.uniqueID != undefined)
-//	02					if (c.game.uniqueId  == string) createUniqueID (clientList);
-//	02		})
-//	02	
-//	02		return string;
-//	02	}
-
-//	01	const gameIDs = [];
-//	01	
-//	01	function createGameId ()
-//	01	{	//	Create a new Game ID and double check that it is unique.  Game IDs are a random string of 10 alpha-numeric
-//	01		//	characters.
-//	01	
-//	01		let string = "";
-//	01	
-//	01		for (let i=0; i<10; i++)
-//	01		{
-//	01			const index = Math.floor (Math.random() * 62);
-//	01	
-//	01			if (index < 10) string += String.fromCharCode (index + 48)
-//	01			else if (index < 36) string += String.fromCharCode (index + 55)
-//	01			else string += String.fromCharCode (index + 61);
-//	01		}
-//	01	
-//	01		if (gameIDs.indexOf (string) > -1) string = createGameId ();
-//	01	
-//	01		return string;
-//	01	}
 
 const WSS = 
 {
@@ -110,11 +20,14 @@ const WSS =
 		{
 			client.ping();
 
-//	02				client.game =
-//	02				{
-//	02					uniqueID: createUniqueID(server.clients),
-//	02					status: true
-//	02				};
+			client.RPSConfig =
+				{
+					status:		undefined,
+					name:		undefined,
+					opponent:	undefined,
+					wins:		0,
+					losses:		0,
+				}
 
 			console.log (chalk.blueBright("WebSocket server says a client has connected"));
 			console.log (chalk.blueBright("current # connections: " + server.clients.size));
@@ -147,10 +60,10 @@ const WSS =
 //	This event handler could get quite large...it may be better to move it into a separate function.  For now, though,
 //	I'll leave it here...
 				message = message.toString();
-//	04					if (message == "wait list")
-if ([ "rock", "paper", "scissors" ].indexOf (message) > -1) playTheGame (client, message);
 
-else if (message == "wait list")
+				if ([ "rock", "paper", "scissors" ].indexOf (message) > -1) playTheGame (client, message);
+
+				else if (message == "wait list")
 				{
 					// eventually do something here...
 				}
@@ -162,9 +75,9 @@ else if (message == "wait list")
 						if (typeof object == "object")
 						{
 							console.log (object);
-							if (object.challenge) configureChallenge (client, message.challenge);
-							else if (object.message) forwardThisMessage (client, message.message);
-							else if (object.selection) rockPaperScissors (client, message.selection);
+							if (object.configuration) configureGame (client, object.configuration);
+							else if (object.message) forwardThisMessage (client, object.message);
+							else if (object.selection) rockPaperScissors (client, object.selection);
 							else
 							{
 								console.log (chalk.redBright ("WEBSOCKET ERROR"));
@@ -225,13 +138,15 @@ else if (message == "wait list")
 	},
 }
 
-function configureChallenge (client, opponent)
+function configureGame (client, config)
 {	//	This is triggered when a message is received indicating a new user has selected an opponent.  That opponent
 	//	might be the server or some other player on the waiting list.  It's also possible the player has decided to
 	//	wait for someone to challenge them.
 
-//	05		if (opponent == "server") client.game.opponent = "server";
-if (opponent == "server") client.opponent = "server";
+//	console.log (config);
+	client.RPSConfig.name = config.name;
+
+	if (config.opponent == "server") client.RPSConfig.opponent = "server";
 	else
 	{
 
@@ -247,7 +162,7 @@ if (opponent == "server") client.opponent = "server";
 	client.send ("server ready");
 }
 
-//	03	const gameIDs = [];
+//	01	const gameIDs = [];
 
 function createGameId ()
 {	//	Create a new Game Id and verify that it is unique.  Game IDs are a random string of 10 alpha-numeric
@@ -280,7 +195,7 @@ function createGameId ()
 		else string += String.fromCharCode (index + 61);
 	}
 
-//	03		if (gameIDs.indexOf (string) > -1) string = createGameId ();
+//	01		if (gameIDs.indexOf (string) > -1) string = createGameId ();
 
 	return string;
 }
@@ -288,10 +203,9 @@ function createGameId ()
 function playTheGame (client, selection)
 {	//	One round of game play.
 
-	client.game.selection = selection;
+	client.RPSConfig.selection = selection;
 
-//	05		if (client.game.opponent == "server")
-if (client.opponent == "server")
+	if (client.RPSConfig.opponent == "server")
 	{	//	Playing against the server...randomly select 'rock', 'paper' or 'scissors'.  Since we don't need
 		//	to wait for a second player to select, return the results of the game.
 
@@ -336,7 +250,7 @@ function gameAccumulator (player, result)
 	//		player.game.selection = undefined
 }
 
-function setGameStatusTrue (client) { client.game.status = true };
+function setGameStatusTrue (client) { client.RPSConfig.status = true };
 
 function testConnections (clientList)
 {	//	Iterate through the set of clients and remove any that are not responding.
@@ -356,7 +270,7 @@ function testConnections (clientList)
 	clientList.forEach (c =>
 	{
 		if (c.closing) c.terminate()
-		else if (c.game.status == false) c.close();
+		else if (c.RPSConfig.status == false) c.close();
 	})
 
 	// And the second go round...ping all of the remaining clients
@@ -365,7 +279,7 @@ function testConnections (clientList)
 	{	//	For each client set the status of to false, then ping it.  If the client responds, the client
 		//	pong event handler will set the status back to true.
 
-		c.game.status = false;
+		c.RPSConfig.status = false;
 		c.ping()
 	});
 }

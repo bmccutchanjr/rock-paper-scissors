@@ -15,11 +15,15 @@ openWebSocket()
 	//	Initiate the game by telling the WebSocket server how the user has decided to play.  That choice
 	//	was made in home.html and passed to this page with a cookie.  So...get the cookie.
 
-	const config = getCookie ("opponent")
+//	01		const config = getCookie ("opponent")
+const config = getCookie ("RPSConfiguration")
+//	console.log (config);
 
-	//	...and send a message to the server
+	//	...and send the configuration to the server...
 
-	if (config) wssSend ( { "challenge": getCookie ("opponent") } ); 
+//		if (config) wssSend ( { "challenge": getCookie ("opponent") } ); 
+//	if (config) wssSend ( config ); 
+if (config) wssSend ( { "configuration": config } );
 	else
 	{
 		alert ("wait list");
@@ -69,19 +73,33 @@ let DOMIsLoaded = false;
 let wssIsReady = false;
 let playAgainstServer = true;
 
-function configureTheGame ()
-{	//	The user chooses how they want to play in home.html and that configuration is passed to this page with a
-	//	cookie.  Get that cookie...
-
-	const opponent = getCookie ("opponent");
-
-	if (opponent == "server") playAgainstServer = true;
-	else if (opponent != "")
-	{	
-		playAgainstServer = false;
-		useGameID = opponent;
-	}
-}
+//	02	I don't seem to be using this code...
+//	02	function configureTheGame ()
+//	02	//	01	{	//	The user chooses how they want to play in home.html and that configuration is passed to this page with a
+//	02	//	01		//	cookie.  Get that cookie...
+//	02	//	01	
+//	02	//	01		const opponent = getCookie ("opponent");
+//	02	//	01	
+//	02	//	01		if (opponent == "server") playAgainstServer = true;
+//	02	//	01		else if (opponent != "")
+//	02	//	01		{	
+//	02	//	01			playAgainstServer = false;
+//	02	//	01			useGameID = opponent;
+//	02	//	01		}
+//	02	{	//	home.html passes a cookie with the game configuration the player selected.  That configuration includes the
+//	02		//	name they have chosen to play with and the opponent they have selected.  Get that cookie...
+//	02	
+//	02		const cookie = getCookie ("RPSConfiguration");
+//	02	
+//	02		if (cookie.opponent == "server") playAgainstServer = true;
+//	02		else if (cookie.opponent != "")
+//	02		{	
+//	02			playAgainstServer = false;
+//	02			useGameID = opponent;
+//	02		}
+//	02	
+//	02		return cookie;
+//	02	}
 
 function getCookie (name)
 {   //  Parse the cookie string and return the value of the selected cookie
@@ -95,7 +113,8 @@ function getCookie (name)
 		if (cPrime[0].trim() == name) value = cPrime[1];
 	})
 
-	return value;
+//	01	return value;
+	return JSON.parse (value);
 }
 
 function showDOMElements ()

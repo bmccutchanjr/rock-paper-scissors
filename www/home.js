@@ -63,7 +63,8 @@ function mainClickHandler (event)
 //	has something to serve and gets lost in the weeds looking for it.
 //
 //	I need a cookie... 
-			setCookie ("opponent", "server");
+
+			setCookie ("server");
 			window.location = "http://localhost/play";
 			break;
 		}
@@ -101,10 +102,18 @@ function mainClickHandler (event)
 	}
 }
 
-function setCookie (name, value)
-{	//	Cookie setter.  Cookies are used to communicate what game option the user has selected to the game page.
+function setCookie (opponent)
+{	//	Cookie setter.  Cookies are used to communicate the player's name and selected game option to game.html.  The
+	//	cookie is used once and that would be almost immediately, so maxAge is 5 minutes.
+	//
+	//	The only parameter to this function is the opponent the player has selected
 
-	document.cookie = name + "=" + value + "; path=/; max-age=86400;";
+	const cookie = 
+		{
+			name:	document.getElementById ("name-input").value,
+			opponent:	opponent
+		}
+	document.cookie = "RPSConfiguration=" + JSON.stringify(cookie) + "; path=/; max-age=86400;";
 }
 
 function getRandomName ()
