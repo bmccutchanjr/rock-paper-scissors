@@ -27,6 +27,7 @@ const WSS =
 					opponent:	undefined,
 					wins:		0,
 					losses:		0,
+					ties:		0,
 				}
 
 			console.log (chalk.blueBright("WebSocket server says a client has connected"));
@@ -74,7 +75,7 @@ const WSS =
 						object = JSON.parse (message);
 						if (typeof object == "object")
 						{
-							console.log (object);
+//	console.log (object);
 							if (object.configuration) configureGame (client, object.configuration);
 							else if (object.message) forwardThisMessage (client, object.message);
 							else if (object.selection) rockPaperScissors (client, object.selection);
@@ -210,44 +211,74 @@ function playTheGame (client, selection)
 		//	to wait for a second player to select, return the results of the game.
 
 		const pick = ["rock", "paper", "scissors"][Math.floor (Math.random() * 3)];
-		const winOrLose = andTheWinnerIs (client, pick)
+		const winOrLose = andTheWinnerIs (client.RPSConfig.selection, pick)
 		gameAccumulator (client, winOrLose);
 	}
 	else
 	{	//	If we're not playing the server, we're playing another user.  They may or may not have made their
 		//	selection yet...
 
-		if (client.opponent.game.selection)
-		{	//	Playing against another person.  We know the client has made their selection because we're
-			//	here.  If the client's opponent has also made a selection, return the results of the game.
+		const opponent = client.RPSConfig.opponent;
+		if (opponent.RPSConfig.selection)
+		{	//	Playing against another person.  We know the player represented by client has made their selection because
+			//	we're here.  If the player's opponent has also made a selection, return the results of the game...and if they
+			//	haven't do nothing.  We'll be here again when they do.
 
-			const winOrLose = andTheWinnerIs (client, pick)
+			const winOrLose = andTheWinnerIs (client.RPSConfig.selection, opponent.RPSConfig.selection)
 			gameAccumulator (client, winOrLose);
-			gameAccumulator (client.opponent, winOrLose * -1);
+			gameAccumulator (opponent, winOrLose * -1);
 		}
 	}
 }
 
-function andTheWinnerIs (player, selection)
+function andTheWinnerIs (player, opponent)
 {	//	Evaluate the options selected and send the results to the users...
 
-	//	If selection has a value, we're playing the server.  Compare client.game.selection to selection
+	//	Parameter 'player' is the selection made by the player represented by the client object that sent a
+	//	message and initiated this comparison.  Opponent is the selection made by player's opponent.	
 
-	//	If selection is undefined, we're playing another user.  Compare client.game.selection to
-	//	client.opponent.game.selection
+	if (player == opponent) return 0;					//	it's a tie
+	else if ((player == "rock") && (opponent == "scissors")) return 1;
+	else if ((player == "paper") && (opponent == "rock")) return 1;
+	else if ((player == "scissors") && (opponent == "paper")) return 1;
 
-	//	return either 1 (win) or -1 (loss)
+	return -1;											//	any other combination and player loses
 }
 
 function gameAccumulator (player, result)
-{	
-	//	Accumulate the reults in client.game.  Result is either 1 (win) or -1 (loss)
-	//		player.game.wins += result
-	//		player.game.losses += result * -1
+{	//	Acculumate the results and send a message to player
 
-	//	Send the results to player and clear player.game.selection
-	//		ws.send (won/loss message, player.game.wins, player.game.losses, player.opponent's name)
-	//		player.game.selection = undefined
+	let text = "";
+
+	if (result == 1)
+	{
+		player.RPSConfig.wins += 1;
+		text = "You won!";
+	}
+	else if (result == -1)
+	{
+		player.RPSConfig.losses += 1;
+		text = "You lost";
+	}
+	else 
+	{
+		player.RPSConfig.ties += 1;
+		text = "You tied";
+	}
+
+	const resultObject =
+		{	result:	text,
+			opponent:	player.RPSConfig.opponent == "server" ? "server" : player.RPSConfig.opponent.RPSConfig.name,
+			wins:	player.RPSConfig.wins,
+			losses:	player.RPSConfig.losses,
+			ties:	player.RPSConfig.ties
+		}
+
+	//	...and send the results to player
+	player.send (JSON.stringify ( { result: resultObject } ) );
+
+	//	...and rest selection
+	player.RPSConfig.selection = undefined;
 }
 
 function setGameStatusTrue (client) { client.RPSConfig.status = true };

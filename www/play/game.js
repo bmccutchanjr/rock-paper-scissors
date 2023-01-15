@@ -36,7 +36,7 @@ if (config) wssSend ( { "configuration": config } );
 .catch (error => { alert (error) } );
 
 window.addEventListener ("load", event =>
-{	event.preventDefault();
+{	event.preventDefault();;
 
 	//	If this is running then the browser has not disabled scripts...remove the noscript and hidden classes
 	//	from <footer> and <main> respectively
@@ -45,6 +45,13 @@ window.addEventListener ("load", event =>
 
 	DOMIsLoaded = true;
 	showDOMElements();
+
+document.getElementById ("button-section").addEventListener ("click", event =>
+{	event.preventDefault();
+
+	const id = event.target.getAttribute ("id");
+	if (id != undefined) wssSend (id)
+})
 })
 
 prefetchImages ();
