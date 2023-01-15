@@ -147,7 +147,10 @@ const WSS =
 //	This event handler could get quite large...it may be better to move it into a separate function.  For now, though,
 //	I'll leave it here...
 				message = message.toString();
-				if (message == "wait list")
+//	04					if (message == "wait list")
+if ([ "rock", "paper", "scissors" ].indexOf (message) > -1) playTheGame (client, message);
+
+else if (message == "wait list")
 				{
 					// eventually do something here...
 				}
@@ -227,14 +230,19 @@ function configureChallenge (client, opponent)
 	//	might be the server or some other player on the waiting list.  It's also possible the player has decided to
 	//	wait for someone to challenge them.
 
-	if (opponent == "server") client.game.opponent = "server";
+//	05		if (opponent == "server") client.game.opponent = "server";
+if (opponent == "server") client.opponent = "server";
 	else
 	{
 
 //	other options here...
-
+//	wait list
+//		A client selecting the wait list will recieve a Game Id, assigned to the game.opponent property of the client
+//		object.  That property can have three values; 'server', a client object or a Game Id.  So any client object in
+//		server.clients with a game.opponent value not another client object and not the string "server" is on the
+//		wait list.  When a challenge is issued and accepted, the Game Id will be replaced by the challenging player's
+//		client object.
 	}
-
 
 	client.send ("server ready");
 }
@@ -275,6 +283,57 @@ function createGameId ()
 //	03		if (gameIDs.indexOf (string) > -1) string = createGameId ();
 
 	return string;
+}
+
+function playTheGame (client, selection)
+{	//	One round of game play.
+
+	client.game.selection = selection;
+
+//	05		if (client.game.opponent == "server")
+if (client.opponent == "server")
+	{	//	Playing against the server...randomly select 'rock', 'paper' or 'scissors'.  Since we don't need
+		//	to wait for a second player to select, return the results of the game.
+
+		const pick = ["rock", "paper", "scissors"][Math.floor (Math.random() * 3)];
+		const winOrLose = andTheWinnerIs (client, pick)
+		gameAccumulator (client, winOrLose);
+	}
+	else
+	{	//	If we're not playing the server, we're playing another user.  They may or may not have made their
+		//	selection yet...
+
+		if (client.opponent.game.selection)
+		{	//	Playing against another person.  We know the client has made their selection because we're
+			//	here.  If the client's opponent has also made a selection, return the results of the game.
+
+			const winOrLose = andTheWinnerIs (client, pick)
+			gameAccumulator (client, winOrLose);
+			gameAccumulator (client.opponent, winOrLose * -1);
+		}
+	}
+}
+
+function andTheWinnerIs (player, selection)
+{	//	Evaluate the options selected and send the results to the users...
+
+	//	If selection has a value, we're playing the server.  Compare client.game.selection to selection
+
+	//	If selection is undefined, we're playing another user.  Compare client.game.selection to
+	//	client.opponent.game.selection
+
+	//	return either 1 (win) or -1 (loss)
+}
+
+function gameAccumulator (player, result)
+{	
+	//	Accumulate the reults in client.game.  Result is either 1 (win) or -1 (loss)
+	//		player.game.wins += result
+	//		player.game.losses += result * -1
+
+	//	Send the results to player and clear player.game.selection
+	//		ws.send (won/loss message, player.game.wins, player.game.losses, player.opponent's name)
+	//		player.game.selection = undefined
 }
 
 function setGameStatusTrue (client) { client.game.status = true };
