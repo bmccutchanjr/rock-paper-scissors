@@ -49,15 +49,20 @@ function prefetchImages ()
 {	//	I'm using images in the rock, paper and scissors buttons and alernate images in hover styles.  But the browser
 	//	doesn't request those images until they're referenced and that creates some lag time between when the mouse
 	//	rolls over a button and the new image is displayed -- which will only be more obvious when this is hosted on the
-	//	web.  So fetch them now...and the browser will use from cache when they're needed.
+	//	web.  So fetch them now...and the browser will use them from cache when they're needed.
 
-	let image = document.createElement ("img");
-	image.src = "../images/rock-white.svg";
-	image.src = "../images/rock-black.svg";
-	image.src = "../images/paper-white.svg";
-	image.src = "../images/paper-black.svg";
-	image.src = "../images/scissors-white.svg";
-	image.src = "../images/scissors-black.svg";
+	//	The buttons are created with the white versions of the SVG, so they're needed first.
+
+	document.createElement ("img").src = "../images/rock-white.svg";
+	document.createElement ("img").src = "../images/paper-white.svg";
+	document.createElement ("img").src = "../images/scissors-white.svg";
+
+	//	The black versions are used in the button's hover style and won't be needed until the DOM is loaded and the
+	//	user has a chance to click a button, so they can wait a few milliseconds
+
+	document.createElement ("img").src = "../images/rock-black.svg";
+	document.createElement ("img").src = "../images/paper-black.svg";
+	document.createElement ("img").src = "../images/scissors-black.svg";
 }
 
 let DOMIsLoaded = false;

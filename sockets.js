@@ -80,7 +80,8 @@ function createUniqueID (clientList)
 const gameIDs = [];
 
 function createGameId ()
-{	//	Create a new Game ID and double check that it is unique.  Game IDs are a random string of 10 digits.
+{	//	Create a new Game ID and double check that it is unique.  Game IDs are a random string of 10 alpha-numeric
+	//	characters.
 
 	let string = "";
 
