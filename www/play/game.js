@@ -126,7 +126,7 @@ function displayResults (results)
 {
 	alert (results.result);
 
-	document.getElementById ("player-wins").innerHTML = "win:&nbsp;&nbsp;" + results.wins;
-	document.getElementById ("player-losses").innerHTML = "lose:&nbsp;&nbsp;" + results.losses;
-	document.getElementById ("player-ties").innerHTML = "tie:&nbsp;&nbsp;" + results.ties;
+	document.getElementById ("player-wins").innerHTML = results.wins;
+	document.getElementById ("player-losses").innerHTML = results.losses;
+	document.getElementById ("player-ties").innerHTML = "( tie:&nbsp;&nbsp;" + results.ties + " )";
 }
