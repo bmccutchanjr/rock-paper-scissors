@@ -32,13 +32,18 @@ function openWebSocket ()
 // //	"server-ready" indicates the server has configured a game for this player and is ready to go.  Configure the DOM
 // //	elements so the user can play also.
 // }
-			else if (event.data == "results") document.dispatchEvent (new Evet ("you-win"));
 			else
 			{
-				alert ("WEBSOCKET ERROR:\n\nThe WebSocket received an unsupported message.  See console.log for more details");
-				console.log ("WEBSOCKET ERROR:");
-				console.log ("An unsupported message was received:");
-				console.log (event.data);
+				const object = JSON.parse (event.data);
+//					if (object.result) document.dispatchEvent (new CustomEvent ("results", object.results));
+				if (object.result) displayResults (object.result);
+				else
+				{
+					alert ("WEBSOCKET ERROR:\n\nThe WebSocket received an unsupported message.  See console.log for more details");
+					console.log ("WEBSOCKET ERROR:");
+					console.log ("An unsupported message was received:");
+					console.log (event.data);
+				}
 			}
 		}
 

@@ -1,13 +1,17 @@
 document.addEventListener ("server-ready", event =>
-{	//	A custom event triggered by a WebSocket message recieved from the server.
+	{	event.preventDefault();
+		//	A custom event triggered by a WebSocket message recieved from the server.
 
 //	Either my Promise is not working correctly, or WS is incredibly fast.  This event listener was not getting
-//	added when coded after the call to openWebSocket().  Truth be told, it was also after prefetching the images
-//	and now I wonder if that is not also async?  Should I move prefetch?
+//	added in time to be triggered when it was coded after the openWebSocket().  Truth be told, it was also after
+//	prefetching the images and now I wonder if that is not also async?  Should I move prefetch?
 
-	wssIsReady = true;
-	showDOMElements ();
-})
+		wssIsReady = true;
+		showDOMElements ();
+	})
+
+let opponentName = "";
+let playerName = "";
 
 openWebSocket()
 .then (wss =>
@@ -15,15 +19,13 @@ openWebSocket()
 	//	Initiate the game by telling the WebSocket server how the user has decided to play.  That choice
 	//	was made in home.html and passed to this page with a cookie.  So...get the cookie.
 
-//	01		const config = getCookie ("opponent")
-const config = getCookie ("RPSConfiguration")
-//	console.log (config);
+	const config = getCookie ("RPSConfiguration")
+	opponentName = config.opponent;
+	playerName = config.name;
 
 	//	...and send the configuration to the server...
 
-//		if (config) wssSend ( { "challenge": getCookie ("opponent") } ); 
-//	if (config) wssSend ( config ); 
-if (config) wssSend ( { "configuration": config } );
+	if (config) wssSend ( { "configuration": config } );
 	else
 	{
 		alert ("wait list");
@@ -36,23 +38,25 @@ if (config) wssSend ( { "configuration": config } );
 .catch (error => { alert (error) } );
 
 window.addEventListener ("load", event =>
-{	event.preventDefault();;
+	{	event.preventDefault();
 
-	//	If this is running then the browser has not disabled scripts...remove the noscript and hidden classes
-	//	from <footer> and <main> respectively
+		//	If this is running then the browser has not disabled scripts...remove the noscript and hidden classes
+		//	from <footer> and <main> respectively
 
-	document.getElementsByTagName ("footer")[0].classList.remove ("noscript");
+		document.getElementsByTagName ("footer")[0].classList.remove ("noscript");
+		document.getElementById ("player-name").innerText = playerName;
+		document.getElementById ("opponent-name").innerText = opponentName;
 
-	DOMIsLoaded = true;
-	showDOMElements();
+		DOMIsLoaded = true;
+		showDOMElements();
 
-document.getElementById ("button-section").addEventListener ("click", event =>
-{	event.preventDefault();
+		document.getElementById ("button-section").addEventListener ("click", event =>
+		{	event.preventDefault();
 
-	const id = event.target.getAttribute ("id");
-	if (id != undefined) wssSend (id)
-})
-})
+			const id = event.target.getAttribute ("id");
+			if (id != undefined) wssSend (id)
+		})
+	})
 
 prefetchImages ();
 
@@ -79,34 +83,6 @@ function prefetchImages ()
 let DOMIsLoaded = false;
 let wssIsReady = false;
 let playAgainstServer = true;
-
-//	02	I don't seem to be using this code...
-//	02	function configureTheGame ()
-//	02	//	01	{	//	The user chooses how they want to play in home.html and that configuration is passed to this page with a
-//	02	//	01		//	cookie.  Get that cookie...
-//	02	//	01	
-//	02	//	01		const opponent = getCookie ("opponent");
-//	02	//	01	
-//	02	//	01		if (opponent == "server") playAgainstServer = true;
-//	02	//	01		else if (opponent != "")
-//	02	//	01		{	
-//	02	//	01			playAgainstServer = false;
-//	02	//	01			useGameID = opponent;
-//	02	//	01		}
-//	02	{	//	home.html passes a cookie with the game configuration the player selected.  That configuration includes the
-//	02		//	name they have chosen to play with and the opponent they have selected.  Get that cookie...
-//	02	
-//	02		const cookie = getCookie ("RPSConfiguration");
-//	02	
-//	02		if (cookie.opponent == "server") playAgainstServer = true;
-//	02		else if (cookie.opponent != "")
-//	02		{	
-//	02			playAgainstServer = false;
-//	02			useGameID = opponent;
-//	02		}
-//	02	
-//	02		return cookie;
-//	02	}
 
 function getCookie (name)
 {   //  Parse the cookie string and return the value of the selected cookie
@@ -144,4 +120,13 @@ function showDOMElements ()
 			document.getElementById ("message-section").classList.remove ("hidden");
 		}
 	}
+}
+
+function displayResults (results)
+{
+	alert (results.result);
+
+	document.getElementById ("player-wins").innerHTML = "win:&nbsp;&nbsp;" + results.wins;
+	document.getElementById ("player-losses").innerHTML = "lose:&nbsp;&nbsp;" + results.losses;
+	document.getElementById ("player-ties").innerHTML = "tie:&nbsp;&nbsp;" + results.ties;
 }
